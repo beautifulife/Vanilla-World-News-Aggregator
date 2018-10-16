@@ -23,7 +23,7 @@ $ yarn start (or npm start)
 
 - [ ] 사용자가 검색어를 입력할 수 있는 란이 있어야 합니다.
 - [ ] 사용자가 검색을 원하는 기간을 설정할 수 있는 UI가 있어야 합니다. (예: 2018년 2월 1일 - 2018년 2월 5일 뉴스 검색)
-- [ ] 검색을 원하는 소스를 선택할 수 있어야 합니다.
+- [ ] 검색을 원하는 소스를 선택할 수 있어야 합니다. (다중 선택 가능, 최대 20개)
   - 검색 소스는 [News API Source](https://newsapi.org/docs/endpoints/sources)를 이용하여 받을 수 있습니다.
 - [ ] 검색 결과는 [News API Everything](https://newsapi.org/docs/endpoints/everything)을 이용하여 보여주시면 됩니다.
 - [ ] 검색 결과가 로딩 중인 상태에서는 로딩 중이라는 메시지 혹은 아이콘을 보여주어야 합니다.
@@ -50,3 +50,7 @@ $ yarn start (or npm start)
   - 뉴스 이미지
   - 뉴스 링크
 - [ ] 모달 바깥 부분을 클릭할 경우, 모달은 사라져야 합니다.
+
+### Advanced
+
+- [ ] Firebase를 이용하여 소셜 로그인 기능을 구현하고 로그인 한 사용자만 검색하도록 구현하기
