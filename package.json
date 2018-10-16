@@ -1,6 +1,8 @@
 {
   "name": "vanilla-world-news",
   "version": "0.1.0",
+  "author": "Ken Huh <ken@vanillacoding.co>",
+  "description": "World News Aggregator Web with React",
   "private": true,
   "dependencies": {
     "react": "^16.5.2",
