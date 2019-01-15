@@ -1,0 +1,21 @@
+.Search-text-path {
+  color: #57c7fe;
+  margin: 0 0 5px 0;
+}
+
+.Search-text-arrow {
+  display: inline-block;
+  color: #5af78d;
+  width: 15px;
+  font-weight: 700;
+}
+
+.Search-text-input {
+  margin-left: 10px;
+  width: calc(100% - 30px);
+  color: #ff5b56;
+}
+
+.right {
+  color: #5af78d;
+}

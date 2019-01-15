@@ -8,58 +8,15 @@
 
 .App-header {
   /* background-color: #282c34; */
-  margin: 25px 0;
-  font-size: calc(40px + 2vmin);
+  margin: 20px 0;
+  font-size: calc(35px + 2vmin);
   font-family: 'Libre Barcode 128 Text', cursive;
   color: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
 }
-
-.App-body {
-  flex: 1;
-  width: 70%;
-  margin: 0 auto;
-  border: 1px solid black;
-  border-radius: 5px;
-  font-size: 1rem;
-  background-color: #272935;
-}
-
-.App-body-window {
-  position: relative;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 20px;
-  color: #f1f1f0;
-}
-
-.App-body-window-left {
-  position: absolute;
-  left: 5px;
-}
-
-.App-body-window-left > span {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin: 3px;
-  border-radius: 100%;
-}
-
-.App-body-window-left > span:nth-child(1){
-  background-color: #ff5b56;
-}
-
-.App-body-window-left > span:nth-child(2){
-  background-color: #f3f99c;
-}
-
-.App-body-window-left > span:nth-child(3){
-  background-color: #5af78d;
-}
-
-
 
 .App-footer {
-  margin-top: 20px;
+  margin-top: 10px;
   height: 20px;
   font-size: 0.8rem;
   line-height: 20px;
