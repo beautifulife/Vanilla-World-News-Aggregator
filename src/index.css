@@ -14,6 +14,6 @@ code {
     monospace;
 }
 
-input, a {
+input, a, button {
   all: unset;
 }
