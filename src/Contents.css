@@ -1,0 +1,20 @@
+.Contents-list {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: #f1f1f0;
+}
+
+.Contents-list-item {
+  margin-bottom: 10px;
+}
+
+.Contents-list-item-title {
+  margin: 0;
+  cursor: pointer;
+}
+
+.Contents-list-item > span {
+  margin: 0px 3px;
+  font-size: 0.7rem;
+  color: #f1f1f0b2;
+}

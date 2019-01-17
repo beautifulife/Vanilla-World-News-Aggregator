@@ -2,28 +2,54 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Search from './Search';
 import Progress from './Progress';
+import Contents from './Contents';
 import './Terminal.css';
 
 class Terminal extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       sectionIndex: 2,
+      newsData: []
     };
 
-    this.toggleSectionIndex = this.toggleSectionIndex.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
+    this.getNewsData = this.getNewsData.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
-  toggleSectionIndex(index) {
+  getNewsData(url) {
+    axios.get(url)
+      .then(response => {
+        console.log(response);
+        this.setState({
+          sectionIndex: 3,
+          newsData: response.data.articles
+        });
+      })
+      .catch(err => console.log('axios newsData부분',err));
+  }
+
+  handleToggle(index) {
     const newSectionIndex = this.state.sectionIndex === index ? null : index;
     console.log(newSectionIndex);
 
     this.setState({ sectionIndex: newSectionIndex });
   }
 
+  handleSearch(keyword, sources, dateFrom, dateTo) {
+    const url = [
+      `https://newsapi.org/v2/everything?q=${keyword}&`,
+      `from=${dateFrom}&to=${dateTo}&sources=${sources}&`,
+      `pageSize=30&sortBy=popularity&apiKey=cc59bebdf1734c19ab68da14ba034986`
+    ].join('');
+
+    console.log(url);
+    this.getNewsData(url);
+  }
+
   render() {
     const checkSectionIndex = (index, type) => {
-      console.log(this);
       if (type === 'class') {
         return this.state.sectionIndex === index ? 'active' : null;
       }
@@ -34,15 +60,15 @@ class Terminal extends Component {
         <div className="Terminal">
           <div className="Terminal-window">
             <div className="Terminal-window-left">
-              <span></span>
-              <span></span>
-              <span></span>
+              <span className="Terminal-window-left-circle"></span>
+              <span className="Terminal-window-left-circle"></span>
+              <span className="Terminal-window-left-circle"></span>
             </div>
-            <span>~/CodeNews</span>
+            <span>~/CodeNews&nbsp;(vanilla-shell)</span>
           </div>
           <div className="Terminal-main">
             <section className="Terminal-main-help">
-              <button className="Terminal-main-help-btn" onClick={() => this.toggleSectionIndex(1)}>
+              <button className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(1)}>
                 <span>Help</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(1, 'class')}`}>
@@ -54,24 +80,24 @@ class Terminal extends Component {
               </div>
             </section>
             <section className="Terminal-main-search">
-              <button className="Terminal-main-search-btn" onClick={() => this.toggleSectionIndex(2)}>
+              <button className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(2)}>
                 <span>Search</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(2, 'class')}`}>
-                <Search />
+                <Search onSearch={this.handleSearch}/>
               </div>
             </section>
-            <section>
+            {/* <section>
               <div>
                 <Progress progressRate={this.props.progressRate} />
               </div>
-            </section>
+            </section> */}
             <section className="Terminal-main-contents">
-              <button className="Terminal-main-contents-btn" onClick={() => this.toggleSectionIndex(3)}>
+              <button className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(3)}>
                 <span>Contents</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(3, 'class')}`}>
-                {/* <Contents /> */}
+                <Contents newsData={this.state.newsData}/>
               </div>
             </section>
             <div>

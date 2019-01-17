@@ -16,7 +16,7 @@ class App extends Component {
       <div className="App">
         <a href="/"><header className="App-header">CodeNews</header></a>
         <Terminal />
-        <footer className="App-footer">Any  question? &nbsp; beautifulife.github.io</footer>
+        <footer className="App-footer">Any question? &nbsp; beautifulife.github.io</footer>
       </div>
     );
   }

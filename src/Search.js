@@ -7,9 +7,13 @@ class Search extends Component {
     super(props);
     this.state = {
       isRight: false,
+      isCommandDone: false,
       sources: null,
-      apiConditionSource: [],
-      apiConditionDate: []
+      date: false,
+      keyword: false,
+      apiConditionSources: '',
+      apiConditionDate: '',
+      apiConditionKeyword: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -33,21 +37,31 @@ class Search extends Component {
     if (searchCommand === 'Source') {
       this.getSourceData();
     } else if (searchCommand === 'Date') {
-      
+      this.setState({ date: true });
     } else if (searchCommand === 'Keyword') {
-
+      this.setState({ keyword: true });
     } else if (searchCommand === 'Search') {
+      let dateFrom = '';
+      let dateTo = '';
 
+      if (this.state.apiConditionDate) {
+        dateFrom = this.state.apiConditionDate[0];
+        dateTo = this.state.apiConditionDate[1];
+      }
+      console.log('요청', this.state.apiConditionKeyword, this.state.apiConditionSources, dateFrom, dateTo);
+      this.props.onSearch(this.state.apiConditionKeyword, this.state.apiConditionSources, dateFrom, dateTo);
     }
   }
 
   setApiConditions(type, condition) {
     if (type === 'source') {
       this.setState({
-        apiConditionSource: condition
+        isCommandDone: true,
+        apiConditionSources: condition.join(',')
       });
     } else if (type === 'date') {
       this.setState({
+        isCommandDone: true,
         apiConditionDate: condition
       });
     }
@@ -72,6 +86,9 @@ class Search extends Component {
     if (ev.keyCode === 13) {
       if (this.state.isRight) {
         this.controlSearchCommand(ev.currentTarget.value);
+        this.setState({
+          isCommandDone: false
+        })
       } else {
         console.log('error wrong command input');
       }
@@ -79,21 +96,92 @@ class Search extends Component {
   }
 
   render() {
-    const { isRight, sources } = this.state;
+    const { isRight, sources, date, keyword, isCommandDone } = this.state;
+    const renderCommandLine = () => {
+      return (
+        <React.Fragment>
+          <p className="Search-text-path">~/CodeNews</p>
+          <span className="Search-text-arrow">&rarr;</span>
+          <input type="text" className={isRight ? "Search-text-input right" : "Search-text-input"} onChange={this.handleChange} onKeyDown={this.handleKeydown} autoFocus />
+        </React.Fragment>
+      )
+    }
+
     const renderSource = () => {
       return (
-        <Source sources={sources} onSet={this.setApiConditions}/>
+        <Source sources={sources} onSet={this.setApiConditions} />
       );
+    }
+
+    const renderDate = () => {
+      return (
+        <Date sources={date} onSet={this.setApiConditions} />
+      )
     }
 
     return (
       <React.Fragment>
-        <p className="Search-text-path">~/CodeNews</p>
-        <span className="Search-text-arrow">&rarr;</span>
-        <input type="text" className={isRight ? "Search-text-input right" : "Search-text-input"} onChange={this.handleChange} onKeyDown={this.handleKeydown} autoFocus />
+        {renderCommandLine()}
         {sources ? renderSource() : null}
+        {date ? renderDate() : null}
+        {keyword ? renderCommandLine(): null}
+        {isCommandDone ? renderCommandLine(): null}
       </React.Fragment>
     );
+  }
+}
+
+class Date extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isRight: false,
+      value: ''
+    }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
+  }
+
+  handleChange(ev) {
+    this.setState({
+      isRight: true,
+      value: ev.currentTarget.value
+    });
+
+    console.log('날짜 체인지')
+  }
+
+  handleKeydown(ev) {
+    console.log(ev.currentTarget.value);
+    if (ev.keyCode === 13) {
+      if (this.state.isRight) {
+        const splittedValue = ev.currentTarget.value.split('~');
+
+        this.props.onSet('date', splittedValue);
+      } else {
+        console.log('error wrong command input');
+      }
+    }
+  }
+
+  render() {
+    const { isRight, value } = this.state;
+
+    return (
+      <fieldset className="Source-text">
+          <legend>Select Date:</legend>
+          <input 
+            type="text" 
+            value={value}
+            className={isRight ? "Search-text-input right" : "Search-text-input"} 
+            onChange={this.handleChange} 
+            onKeyDown={this.handleKeydown}
+            placeholder='choose from-date and to-date like 2019-01-05~2019-01-07'
+            autoFocus
+          />
+        </fieldset>
+    )
   }
 }
 
@@ -102,7 +190,6 @@ class Source extends Component {
     super(props);
     this.state = {
       isRight: false,
-      sources: this.props.sources,
       choosedValue: '',
       limitSize: false
     }
@@ -125,15 +212,16 @@ class Source extends Component {
       });
     }
 
-    console.log('이벤트 체인지')
+    console.log('소스 체인지')
   }
 
-  handleKeydown(ev) {
+  handleKeydown(ev, sourceIndexMap) {
     console.log(ev.currentTarget.value);
     if (ev.keyCode === 13) {
       if (this.state.isRight) {
-        console.log(this.state.choosedValue);
-        this.props.onSet('source', this.state.choosedValue);
+        const sourceIdList = this.state.choosedValue.map(value => sourceIndexMap[value]);
+
+        this.props.onSet('source', sourceIdList);
       } else {
         console.log('error wrong command input');
       }
@@ -158,9 +246,12 @@ class Source extends Component {
   render() {
     const { isRight, choosedValue, limitSize } = this.state;
     const { sources } = this.props;
+    const sourceIndexMap = {};
     const sourceItem = sources.map((source, index) => {
+      sourceIndexMap[index + 1] = source.id;
+
       return (
-        <li key={index} className="Source-list-item" onClick={this.handleClick}>
+        <li key={index + 1} className="Source-list-item" onClick={this.handleClick}>
           <span>{index + 1}</span>&nbsp;
           <span>{source.name}</span>
         </li>
@@ -172,16 +263,18 @@ class Source extends Component {
         <ul className="Source-list">
           {sourceItem}
         </ul>
-        <fieldset>
-          <legend className="Source-text-legend">Select Sources:</legend>
+        <fieldset className="Source-text">
+          <legend>Select Sources:</legend>
           <input 
-          type="text" 
-          value={choosedValue}
-          className={isRight ? "Search-text-input right" : "Search-text-input"} 
-          onChange={this.handleChange} 
-          onKeyDown={this.handleKeydown}
-          placeholder='choose news sources like "1,2,3,4,5..." until 20source possible'
-          autoFocus disabled={limitSize} />
+            type="text" 
+            value={choosedValue}
+            className={isRight ? "Search-text-input right" : "Search-text-input"} 
+            onChange={this.handleChange} 
+            onKeyDown={ev => this.handleKeydown(ev, sourceIndexMap)}
+            placeholder='choose news sources like "1,2,3,4,5..." until 20source possible'
+            disabled={limitSize} 
+            autoFocus
+          />
         </fieldset>
       </React.Fragment>
     )
