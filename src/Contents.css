@@ -2,6 +2,7 @@
   padding-left: 30px;
   font-size: 0.9rem;
   color: #f1f1f0;
+  list-style: none;
 }
 
 .Contents-list-item {
@@ -15,6 +16,42 @@
 
 .Contents-list-item > span {
   margin: 0px 3px;
+  font-size: 0.7rem;
+  color: #f1f1f0b2;
+}
+
+.Contents-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0;
+  list-style: none;
+}
+
+.Contents-card-item {
+  width: 150px;
+  min-height: 180px;
+  margin: 0 10px 50px 10px;
+  padding: 5px;
+  border: 1px dotted white;
+}
+
+.Contents-card-item > span {
+  display: inline-block;
+  padding: 5px;
+}
+
+.Contents-card-item-img {
+  width: 150px;
+}
+
+.Contents-card-item-title {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: #f1f1f0;
+}
+
+.Contents-card-item-author {
   font-size: 0.7rem;
   color: #f1f1f0b2;
 }

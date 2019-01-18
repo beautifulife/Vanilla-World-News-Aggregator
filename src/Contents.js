@@ -16,8 +16,8 @@ class Contents extends Component {
   }
 
   render() {
-    const { newsData } = this.props;
-    const newsItem = newsData.map((article, index) => (
+    const { newsData, viewType } = this.props;
+    const listTypeNewsItem = newsData.map((article, index) => (
       <li key={index + 1} className="Contents-list-item">
         <p className="Contents-list-item-title" onClick={ev => this.handleClick(ev, article)}>{article.title}</p>
         <span className="Contents-list-item-source">{article.source.name}</span>
@@ -28,10 +28,18 @@ class Contents extends Component {
       </li>
     ));
 
+    const cardTypeNewsItem = newsData.map((article, index) => (
+      <li key={index + 1} className="Contents-card-item">
+        <img className="Contents-card-item-img" src={article.urlToImage} alt={article.title} />
+        <span className="Contents-card-item-title">{article.title}</span><br />
+        <span className="Contents-card-item-author">{article.author}</span>
+      </li>
+    ));
+
     return (
-      <ol className="Contents-list">
-        {newsItem}
-      </ol>
+      <ul className={viewType === 'List' ? 'Contents-list' : 'Contents-card'}>
+        {viewType === 'List' ? listTypeNewsItem : cardTypeNewsItem}
+      </ul>
     );
   }
 }

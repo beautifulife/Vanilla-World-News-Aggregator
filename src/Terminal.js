@@ -11,11 +11,13 @@ class Terminal extends Component {
     this.state = {
       sectionIndex: 2,
       newsData: [],
+      viewType: 'List',
     };
 
     this.handleToggle = this.handleToggle.bind(this);
     this.getNewsData = this.getNewsData.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleViewType = this.handleViewType.bind(this);
   }
 
   getNewsData(url) {
@@ -55,8 +57,15 @@ class Terminal extends Component {
     this.getNewsData(url);
   }
 
+  handleViewType(viewType) {
+    this.setState({
+      sectionIndex: 3,
+      viewType,
+    });
+  }
+
   render() {
-    const { sectionIndex, newsData } = this.state;
+    const { sectionIndex, newsData, viewType } = this.state;
     const checkSectionIndex = (index, type) => {
       if (type === 'class') {
         return sectionIndex === index ? 'active' : null;
@@ -92,7 +101,7 @@ class Terminal extends Component {
                 <span>Search</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(2, 'class')}`}>
-                <Search onSearch={this.handleSearch} />
+                <Search onSearch={this.handleSearch} onChangeCommand={this.handleViewType} />
               </div>
             </section>
             {/* <section>
@@ -105,7 +114,7 @@ class Terminal extends Component {
                 <span>Contents</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(3, 'class')}`}>
-                <Contents newsData={newsData} />
+                <Contents newsData={newsData} viewType={viewType} />
               </div>
             </section>
             <div>

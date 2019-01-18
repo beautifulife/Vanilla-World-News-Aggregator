@@ -54,6 +54,9 @@ class Search extends Component {
   }
 
   controlSearchCommand(searchCommand) {
+    const { apiConditionDate, apiConditionKeyword, apiConditionSources, page } = this.state;
+    const { onSearch, onChangeCommand } = this.props;
+
     console.log('onsearch', searchCommand);
     if (searchCommand === 'Source') {
       this.getSourceData();
@@ -62,9 +65,6 @@ class Search extends Component {
     } else if (searchCommand === 'Keyword') {
       this.setState({ keyword: true });
     } else if (searchCommand === 'Search') {
-      const { apiConditionDate, apiConditionKeyword, apiConditionSources, page } = this.state;
-      const { onSearch } = this.props;
-
       if (apiConditionSources || apiConditionKeyword) {
         let dateFrom = '';
         let dateTo = '';
@@ -74,18 +74,19 @@ class Search extends Component {
         }
         console.log('요청', apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page);
         onSearch(apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page);
-
-        this.setState({ page: page + 1 });
       } else {
         alert('You must select at least one of the Sources or Keywords.');
       }
+    } else if (searchCommand === 'Card' || searchCommand === 'List') {
+      onChangeCommand(searchCommand);
     }
   }
 
   handleChange(ev) {
     console.log('chage', ev.currentTarget.value);
     if (ev.currentTarget.value === 'Source' || ev.currentTarget.value === 'Date'
-    || ev.currentTarget.value === 'Keyword' || ev.currentTarget.value === 'Search') {
+    || ev.currentTarget.value === 'Keyword' || ev.currentTarget.value === 'Search'
+    || ev.currentTarget.value === 'Card' || ev.currentTarget.value === 'List') {
       this.setState({
         isRight: true,
       });
