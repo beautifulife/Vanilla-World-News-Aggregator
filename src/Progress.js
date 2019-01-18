@@ -4,15 +4,16 @@ import React, { Component } from 'react';
 class Progress extends Component {
   constructor(props) {
     super(props);
-    this.state = {progress: ''};
+    this.state = { progress: '' };
   }
 
   render() {
+    const { progress } = this.state;
     return (
       <React.Fragment>
-        이곳은 진행상태
+        {progress}
       </React.Fragment>
-    )
+    );
   }
 }
 

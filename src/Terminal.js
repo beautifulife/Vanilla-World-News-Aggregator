@@ -10,7 +10,7 @@ class Terminal extends Component {
     super(props);
     this.state = {
       sectionIndex: 2,
-      newsData: []
+      newsData: [],
     };
 
     this.handleToggle = this.handleToggle.bind(this);
@@ -20,28 +20,35 @@ class Terminal extends Component {
 
   getNewsData(url) {
     axios.get(url)
-      .then(response => {
+      .then((response) => {
         console.log(response);
         this.setState({
           sectionIndex: 3,
-          newsData: response.data.articles
+          newsData: response.data.articles,
         });
       })
-      .catch(err => console.log('axios newsData부분',err));
+      .catch(err => console.log('axios newsData부분', err));
   }
 
   handleToggle(index) {
-    const newSectionIndex = this.state.sectionIndex === index ? null : index;
+    const { sectionIndex } = this.state;
+
+    const newSectionIndex = sectionIndex === index ? null : index;
     console.log(newSectionIndex);
 
     this.setState({ sectionIndex: newSectionIndex });
   }
 
-  handleSearch(keyword, sources, dateFrom, dateTo) {
+  handleSearch(keyword, sources, dateFrom, dateTo, page) {
+    keyword = keyword ? `q=${keyword}&` : '';
+    sources = sources ? `sources=${sources}&` : '';
+    dateFrom = dateFrom ? `dateFrom=${dateFrom}&` : '';
+    dateTo = dateTo ? `dateTo=${dateTo}&` : '';
+    page = `page=${page}&`;
+
     const url = [
-      `https://newsapi.org/v2/everything?q=${keyword}&`,
-      `from=${dateFrom}&to=${dateTo}&sources=${sources}&`,
-      `pageSize=30&sortBy=popularity&apiKey=cc59bebdf1734c19ab68da14ba034986`
+      `https://newsapi.org/v2/everything?${keyword}${dateFrom}${dateTo}${sources}`,
+      `pageSize=30&${page}sortBy=popularity&apiKey=cc59bebdf1734c19ab68da14ba034986`,
     ].join('');
 
     console.log(url);
@@ -49,26 +56,27 @@ class Terminal extends Component {
   }
 
   render() {
+    const { sectionIndex, newsData } = this.state;
     const checkSectionIndex = (index, type) => {
       if (type === 'class') {
-        return this.state.sectionIndex === index ? 'active' : null;
+        return sectionIndex === index ? 'active' : null;
       }
-    }
+    };
 
     return (
       <React.Fragment>
         <div className="Terminal">
           <div className="Terminal-window">
             <div className="Terminal-window-left">
-              <span className="Terminal-window-left-circle"></span>
-              <span className="Terminal-window-left-circle"></span>
-              <span className="Terminal-window-left-circle"></span>
+              <span className="Terminal-window-left-circle" />
+              <span className="Terminal-window-left-circle" />
+              <span className="Terminal-window-left-circle" />
             </div>
             <span>~/CodeNews&nbsp;(vanilla-shell)</span>
           </div>
           <div className="Terminal-main">
             <section className="Terminal-main-help">
-              <button className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(1)}>
+              <button type="button" className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(1)}>
                 <span>Help</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(1, 'class')}`}>
@@ -80,11 +88,11 @@ class Terminal extends Component {
               </div>
             </section>
             <section className="Terminal-main-search">
-              <button className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(2)}>
+              <button type="button" className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(2)}>
                 <span>Search</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(2, 'class')}`}>
-                <Search onSearch={this.handleSearch}/>
+                <Search onSearch={this.handleSearch} />
               </div>
             </section>
             {/* <section>
@@ -93,11 +101,11 @@ class Terminal extends Component {
               </div>
             </section> */}
             <section className="Terminal-main-contents">
-              <button className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(3)}>
+              <button type="button" className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(3)}>
                 <span>Contents</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(3, 'class')}`}>
-                <Contents newsData={this.state.newsData}/>
+                <Contents newsData={newsData} />
               </div>
             </section>
             <div>

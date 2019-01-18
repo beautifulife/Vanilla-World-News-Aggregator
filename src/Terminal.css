@@ -72,13 +72,13 @@
 }
 
 .Terminal-main-wrapper {
-  max-height: 0;
+  height: 0;
   overflow: hidden;
 }
 
 .Terminal-main-wrapper.active {
   overflow: auto;
-  max-height: calc(100vh - 219px);
+  height: calc(100vh - 219px);
   padding: 10px 15px;
 }
 
