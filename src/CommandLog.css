@@ -1,14 +1,14 @@
 
-.Search-wrapper {
+.CommandLog-wrapper {
   padding: 10px 15px;
 }
 
-.Search-text-path {
+.CommandLog-text-path {
   margin: 0 0 5px 0;
   color: #57c7fe;
 }
 
-.Search-text-arrow {
+.CommandLog-text-arrow {
   display: inline-block;
   width: 15px;
   margin: 0 0 5px 0;
@@ -16,7 +16,7 @@
   color: #5af78d;
 }
 
-.Search-text-input {
+.CommandLog-text-input {
   width: calc(100% - 30px);
   margin-left: 10px;
   color: #ff5b56;

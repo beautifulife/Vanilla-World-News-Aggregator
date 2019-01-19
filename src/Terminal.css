@@ -41,6 +41,29 @@
   background-color: #5af78d;
 }
 
+.Terminal-main-command-path {
+  margin: 0 0 5px 0;
+  color: #57c7fe;
+}
+
+.Terminal-main-command-arrow {
+  display: inline-block;
+  width: 15px;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  color: #5af78d;
+}
+
+.Terminal-main-command-input {
+  width: calc(100% - 30px);
+  margin-left: 5px;
+  color: #ff5b56;
+}
+
+.right {
+  color: #5af78d;
+}
+
 .Terminal-main {
   flex-direction: column;
   height: calc(100% - 20px);
@@ -48,11 +71,12 @@
   font-size: 0.9rem;
 }
 
-.Terminal-main > section {
+.Terminal-main-command {
+  padding: 10px 15px;
 }
 
-.Terminal-main > section:first-child {
-  margin: 0;
+.Terminal-main-command.active {
+  height: calc(100% - 59px);
 }
 
 .Terminal-main-toggle-btn {
@@ -77,20 +101,7 @@
 }
 
 .Terminal-main-wrapper.active {
-  overflow: auto;
-  height: calc(100vh - 219px);
+  height: calc(100vh - 263px);
   padding: 10px 15px;
-}
-
-.Terminal-main-help {
-  flex: 0;
-}
-
-.Terminal-main-help-list {
-  margin: 0px;
-  color: #f1f1f0;
-}
-
-.Terminal-main-help-list span {
-  color: #5af78d;
+  overflow: auto;
 }
