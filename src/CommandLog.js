@@ -18,22 +18,19 @@ class Search extends Component {
   componentDidMount() {
     const { sources } = this.state;
     if (!sources) {
-      console.log('ajax start');
       axios.get('https://newsapi.org/v2/sources?apiKey=cc59bebdf1734c19ab68da14ba034986')
         .then((response) => {
-          console.log('ajax source done');
           this.setState({
             sources: response.data.sources,
           });
         })
-        .catch(err => console.log('axios source부분', err));
+        .catch(err => console.error('axios source부분', err));
     }
   }
 
   render() {
     const { sources } = this.state;
     const { command, onSet } = this.props;
-    console.log('commandLog render');
 
     const renderByCommand = () => {
       switch (command) {
@@ -46,7 +43,7 @@ class Search extends Component {
         case 'Date':
           return <Date onSet={onSet} />;
         default:
-          console.log(command);
+          console.error(command);
       }
     };
 

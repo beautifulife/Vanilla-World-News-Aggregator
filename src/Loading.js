@@ -1,4 +1,4 @@
-import './Progress.css';
+import './Loading.css';
 import React, { Component } from 'react';
 
 class Progress extends Component {

@@ -27,21 +27,19 @@ class Source extends Component {
         limitSize: true,
       });
     }
-
-    console.log('소스 체인지');
   }
 
   handleKeydown(ev, sourceIndexMap) {
     const { isRight, choosedValue } = this.state;
     const { onSet } = this.props;
-    console.log(ev.currentTarget.value);
+
     if (ev.keyCode === 13) {
       if (isRight) {
         const sourceIdList = choosedValue.map(value => sourceIndexMap[value]);
 
         onSet('source', sourceIdList);
       } else {
-        console.log('error wrong command input');
+        console.error('error wrong command input');
       }
     }
   }
@@ -49,7 +47,6 @@ class Source extends Component {
   handleClick(ev) {
     const { limitSize, choosedValue } = this.state;
 
-    console.log(ev.currentTarget.dataset.id);
     if (!limitSize) {
       const newChoosedValue = [...choosedValue, ev.currentTarget.firstElementChild.textContent];
       this.setState({

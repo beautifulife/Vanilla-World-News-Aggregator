@@ -10,6 +10,10 @@ class Modal extends Component {
     }
   }
 
+  handleError(ev) {
+    ev.currentTarget.src = './asset/image/sub_img.png';
+  }
+
   render() {
     const { article } = this.props;
 
@@ -18,7 +22,8 @@ class Modal extends Component {
         <div className="Modal-contents">
           <h1 className="Modal-contents-title">{article.title}</h1>
           <div className="Modal-contents-info-wrapper">
-            <img className="Modal-contents-image" src={article.urlToImage} alt={article.title} />
+
+            <img className="Modal-contents-image" src={article.urlToImage || './asset/image/sub_img.png'} alt={article.title} onError={this.handleError.bind(this)} />
             <div className="Modal-contents-subInfo-wrapper">
               <span className="Modal-contents-subInfo">
                 <span>Source:</span>
@@ -45,7 +50,6 @@ class Modal extends Component {
             <p>{article.content}</p>
           </div>
         </div>
-        {/* <button type="button" className="Modal-close-btn"><i className="fas fa-times" /></button> */}
       </div>
     );
   }

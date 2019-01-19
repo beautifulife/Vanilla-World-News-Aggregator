@@ -3,20 +3,14 @@ import './Contents.css';
 
 // const imageToAscii = require('image-to-ascii');
 class Contents extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      contentsData: '',
-    };
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
   handleClick(ev, article) {
     const { onClick } = this.props;
 
     onClick(article);
-    console.log(article.source.name, article.author, article.title, article.publishedAt, article.description, article.content, article.urlToImage, article.url);
+  }
+
+  handleError(ev) {
+    ev.currentTarget.src = './asset/image/sub_img.png';
   }
 
   render() {
@@ -25,7 +19,7 @@ class Contents extends Component {
 
     if (viewType === 'List') {
       newsItem = newsData.map((article, index) => (
-        <li key={index + 1} className="Contents-list-item">
+        <li key={article.title} className="Contents-list-item">
           <p className="Contents-list-item-title" onClick={ev => this.handleClick(ev, article)}>
             <span className="Contents-list-item-index">{index + 1}</span>
             {article.title}
@@ -38,10 +32,10 @@ class Contents extends Component {
         </li>
       ));
     } else {
-      newsItem = newsData.map((article, index) => (
-        <li key={index + 1} className="Contents-card-item">
-          <img className="Contents-card-item-img" src={article.urlToImage} alt={article.title} onClick={ev => this.handleClick(ev, article)} />
-          <span className="Contents-card-item-title" onClick={ev => this.handleClick(ev, article)}>{article.title}</span><br />
+      newsItem = newsData.map(article => (
+        <li key={article.title} className="Contents-card-item">
+          <img className="Contents-card-item-img" src={article.urlToImage || './asset/image/sub_img.png'} alt={article.title} onClick={ev => this.handleClick(ev, article)} onError={this.handleError} />
+          <span className="Contents-card-item-title" onClick={ev => this.handleClick.bind(this, ev, article)}>{article.title}</span><br />
           <span className="Contents-card-item-author">{article.author}</span>
         </li>
       ));

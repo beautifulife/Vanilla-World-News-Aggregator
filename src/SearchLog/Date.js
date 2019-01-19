@@ -18,21 +18,19 @@ class Date extends Component {
       isRight: true,
       value: ev.currentTarget.value,
     });
-
-    console.log('날짜 체인지');
   }
 
   handleKeydown(ev) {
     const { isRight } = this.state;
     const { onSet } = this.props;
-    console.log(ev.currentTarget.value);
+
     if (ev.keyCode === 13) {
       if (isRight) {
         const splittedValue = ev.currentTarget.value.split('~');
 
         onSet('date', splittedValue);
       } else {
-        console.log('error wrong command input');
+        console.error('error wrong command input');
       }
     }
   }

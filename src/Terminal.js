@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import CommandLog from './CommandLog';
-import Progress from './Progress';
+import Loading from './Loading';
 import Contents from './Contents';
 import './Terminal.css';
 
@@ -28,22 +28,63 @@ class Terminal extends Component {
     this.handleViewType = this.handleViewType.bind(this);
     this.controlCommand = this.controlCommand.bind(this);
     this.setApiConditions = this.setApiConditions.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   getNewsData(url) {
+    const { page, newsData } = this.state;
+
     axios.get(url)
       .then((response) => {
-        console.log(response);
-        this.setState({
-          sectionIndex: 3,
-          newsData: response.data.articles,
-        });
+        if (page === 1) {
+          this.setState({
+            sectionIndex: 3,
+            newsData: response.data.articles,
+            page: 2,
+          });
+        } else {
+          this.setState({
+            newsData: [
+              ...newsData,
+              ...response.data.articles,
+            ],
+            page: page + 1,
+          });
+        }
+
+        this.isAjaxCallDone = true;
       })
-      .catch(err => console.log('axios newsData부분', err));
+      .catch(err => console.error('axios newsData부분', err));
+  }
+
+  setApiConditions(type, condition) {
+    if (type === 'source') {
+      this.setState({
+        apiConditionSources: condition.join(','),
+      });
+    } else if (type === 'date') {
+      this.setState({
+        apiConditionDate: condition,
+      });
+    } else if (type === 'keyword') {
+      this.setState({
+        apiConditionKeyword: condition,
+      });
+    }
   }
 
   handleToggle(index) {
     this.setState({ sectionIndex: index });
+  }
+
+  handleScroll(ev) {
+    const { apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page } = this.ajaxCallInput;
+
+    if (ev.currentTarget.scrollTop / (ev.currentTarget.scrollHeight - ev.currentTarget.clientHeight) > 0.8 &&
+      this.isAjaxCallDone) {
+      this.isAjaxCallDone = false;
+      this.handleSearch(apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page);
+    }
   }
 
   handleSearch(keyword, sources, dateFrom, dateTo, page) {
@@ -58,7 +99,6 @@ class Terminal extends Component {
       `pageSize=30&${page}sortBy=popularity&apiKey=cc59bebdf1734c19ab68da14ba034986`,
     ].join('');
 
-    console.log(url);
     this.getNewsData(url);
   }
 
@@ -70,7 +110,6 @@ class Terminal extends Component {
   }
 
   handleChange(ev) {
-    console.log('chage', ev.currentTarget.value);
     if (ev.currentTarget.value === 'Help' || ev.currentTarget.value === 'Source' || ev.currentTarget.value === 'Keyword'
     || ev.currentTarget.value === 'Date' || ev.currentTarget.value === 'Search' || ev.currentTarget.value === 'Card'
     || ev.currentTarget.value === 'List') {
@@ -91,7 +130,7 @@ class Terminal extends Component {
       if (isRight) {
         this.controlCommand(ev.currentTarget.value);
       } else {
-        console.log('error wrong command input');
+        console.error('error wrong command input');
       }
     }
   }
@@ -114,8 +153,10 @@ class Terminal extends Component {
           if (apiConditionDate) {
             [dateFrom, dateTo] = apiConditionDate;
           }
-          console.log('요청', apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page);
+
+          this.setState({ page: 1 });
           this.handleSearch(apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page);
+          this.ajaxCallInput = { apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page };
         } else {
           alert('You must select at least one of the Sources or Keywords.');
         }
@@ -123,24 +164,6 @@ class Terminal extends Component {
         this.handleViewType(command);
       }
     }
-    console.log('controlCommand', command);
-  }
-
-  setApiConditions(type, condition) {
-    if (type === 'source') {
-      this.setState({
-        apiConditionSources: condition.join(','),
-      });
-    } else if (type === 'date') {
-      this.setState({
-        apiConditionDate: condition,
-      });
-    } else if (type === 'keyword') {
-      this.setState({
-        apiConditionKeyword: condition,
-      });
-    }
-    console.log('terminal', type, condition);
   }
 
   render() {
@@ -187,12 +210,12 @@ class Terminal extends Component {
               <button type="button" className="Terminal-main-toggle-btn" onClick={() => this.handleToggle(3)}>
                 <span>Contents</span>
               </button>
-              <div className={`Terminal-main-wrapper ${checkSectionIndex(3, 'class')}`}>
+              <div className={`Terminal-main-wrapper ${checkSectionIndex(3, 'class')}`} onScroll={this.handleScroll}>
                 <Contents onClick={onClick} newsData={newsData} viewType={viewType} />
               </div>
             </section>
             <div>
-              {/* <Progress progressRate={this.props.progressRate} /> */}
+              {/* <Loading progressRate={this.props.progressRate} /> */}
             </div>
           </div>
         </div>
