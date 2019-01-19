@@ -145,6 +145,7 @@ class Terminal extends Component {
 
   render() {
     const { sectionIndex, newsData, viewType, isRight, command } = this.state;
+    const { onClick } = this.props;
     const checkSectionIndex = (index, type) => {
       if (type === 'class') {
         return sectionIndex === index ? 'active' : null;
@@ -187,12 +188,9 @@ class Terminal extends Component {
                 <span>Contents</span>
               </button>
               <div className={`Terminal-main-wrapper ${checkSectionIndex(3, 'class')}`}>
-                <Contents newsData={newsData} viewType={viewType} />
+                <Contents onClick={onClick} newsData={newsData} viewType={viewType} />
               </div>
             </section>
-            <div>
-              {/* <Modal /> */}
-            </div>
             <div>
               {/* <Progress progressRate={this.props.progressRate} /> */}
             </div>

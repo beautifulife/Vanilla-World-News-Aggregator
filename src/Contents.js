@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Contents.css';
 
-const imageToAscii = require('image-to-ascii');
+// const imageToAscii = require('image-to-ascii');
 class Contents extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +13,9 @@ class Contents extends Component {
   }
 
   handleClick(ev, article) {
+    const { onClick } = this.props;
+
+    onClick(article);
     console.log(article.source.name, article.author, article.title, article.publishedAt, article.description, article.content, article.urlToImage, article.url);
   }
 
@@ -23,7 +26,10 @@ class Contents extends Component {
     if (viewType === 'List') {
       newsItem = newsData.map((article, index) => (
         <li key={index + 1} className="Contents-list-item">
-          <p className="Contents-list-item-title" onClick={ev => this.handleClick(ev, article)}><span className="Contents-list-item-index">{index + 1}</span>{article.title}</p>
+          <p className="Contents-list-item-title" onClick={ev => this.handleClick(ev, article)}>
+            <span className="Contents-list-item-index">{index + 1}</span>
+            {article.title}
+          </p>
           <span className="Contents-list-item-source">{article.source.name}</span>
           <span>|</span>
           <span className="Contents-list-item-author">{article.author}</span>
@@ -34,8 +40,8 @@ class Contents extends Component {
     } else {
       newsItem = newsData.map((article, index) => (
         <li key={index + 1} className="Contents-card-item">
-          <img className="Contents-card-item-img" src={article.urlToImage} alt={article.title} />
-          <span className="Contents-card-item-title">{article.title}</span><br />
+          <img className="Contents-card-item-img" src={article.urlToImage} alt={article.title} onClick={ev => this.handleClick(ev, article)} />
+          <span className="Contents-card-item-title" onClick={ev => this.handleClick(ev, article)}>{article.title}</span><br />
           <span className="Contents-card-item-author">{article.author}</span>
         </li>
       ));

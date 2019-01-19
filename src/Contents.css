@@ -53,13 +53,16 @@
 }
 
 .Contents-card-item-img {
+  filter: grayscale(1);
   width: 150px;
+  cursor: pointer;
 }
 
 .Contents-card-item-title {
   display: inline-block;
   font-size: 0.8rem;
   color: #f1f1f0;
+  cursor: pointer;
 }
 
 .Contents-card-item-author {

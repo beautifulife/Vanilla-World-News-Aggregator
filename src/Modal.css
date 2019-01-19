@@ -1,0 +1,85 @@
+.Modal-background {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  cursor: auto;
+}
+
+.Modal-contents {
+  overflow: auto;
+  width: 65%;
+  height: 80%;
+  padding: 25px;
+  border-radius: 10px;
+  background-color: white;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.Modal-contents-title {
+  font-size: 1.5rem;
+  margin: 20px;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.Modal-contents-info-wrapper {
+  display: flex;
+  height: 40%;
+  margin-bottom: 30px;
+  font-size: 0.9rem;
+}
+
+.Modal-contents-image {
+  max-width: 50%;
+  border-radius: 10px;
+}
+
+.Modal-contents-subInfo-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  max-width: 60%;
+  padding: 10px 0px 0px 10px;
+  flex: 1;
+}
+
+.Modal-contents-subInfo > span{
+  margin-bottom: 10px;
+  color: gray;
+}
+
+.Modal-contents-subInfo > span {
+  display: inline-block;
+  margin-left: 5px;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.Modal-contents-subInfo > span:first-child {
+  color: gray;
+}
+
+.Modal-contents-main > p {
+  margin-top: 5px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.Modal-contents-main-description,
+.Modal-contents-main-content {
+  color: gray;
+  margin: 0;
+}
+/* 
+.Modal-close-btn {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+} */
