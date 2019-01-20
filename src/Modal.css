@@ -34,8 +34,10 @@
 }
 
 .Modal-contents-image {
-  max-width: 50%;
+  width: 50%;
   border-radius: 10px;
+  background-size: cover;
+  background-position: center center;
 }
 
 .Modal-contents-subInfo-wrapper {
@@ -74,12 +76,3 @@
   color: gray;
   margin: 0;
 }
-/* 
-.Modal-close-btn {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  font-size: 20px;
-  color: white;
-  cursor: pointer;
-} */

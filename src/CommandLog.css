@@ -25,33 +25,3 @@
 .right {
   color: #5af78d;
 }
-
-.Source-list {
-  margin: 0 0 5px 0;
-  padding: 0;
-  list-style: none;
-}
-
-.Source-list-item {
-  display: inline-block;
-  margin-right: 15px;
-  font-size: 0.8rem;
-  color: #f1f1f0;
-  cursor: pointer;
-}
-
-.Source-list-item > span:first-child {
-  color: #9aecfe;
-}
-
-.Source-select {
-  display: inline-block;
-  margin: 0 0 5px 0;
-  font-weight: 700;
-  color: #5af78d;
-}
-
-.Source-text {
-  margin: 0 0 5px 0;
-  color: #f1f1f0;
-}

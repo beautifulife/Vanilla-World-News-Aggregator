@@ -7,11 +7,11 @@ class Command extends Component {
 
     return (
       <React.Fragment>
-        <p className="Search-text-path">~/CodeNews</p>
-        <span className="Search-text-arrow">&rarr;</span>
+        <p className="Command-text-path">~/CodeNews</p>
+        <span className="Command-text-arrow">&rarr;</span>
         <input
           type="text"
-          className={isRight ? 'Search-text-input right' : 'Search-text-input'}
+          className={isRight ? 'Command-text-input right' : 'Command-text-input'}
           onChange={this.handleChange}
           onKeyDown={this.handleKeydown}
           autoFocus

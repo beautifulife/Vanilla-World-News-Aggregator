@@ -37,12 +37,12 @@ class Keyword extends Component {
     const { value, isRight } = this.state;
 
     return (
-      <fieldset className="Source-text">
+      <fieldset className="Keyword-text">
         <legend>Keyword:</legend>
         <input
           type="text"
           value={value}
-          className={isRight ? 'Search-text-input right' : 'Search-text-input'}
+          className={isRight ? 'Keyword-text-input right' : 'Keyword-text-input'}
           onChange={this.handleChange}
           onKeyDown={this.handleKeydown}
           placeholder="enter keyword, want to search"

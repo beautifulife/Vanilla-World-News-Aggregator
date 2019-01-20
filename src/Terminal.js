@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import CommandLog from './CommandLog';
-import Loading from './Loading';
+import Loader from './Loader';
 import Contents from './Contents';
 import './Terminal.css';
 
@@ -10,7 +10,7 @@ class Terminal extends Component {
     super(props);
     this.state = {
       sectionIndex: 1,
-      newsData: [],
+      newsData: '',
       viewType: 'List',
       isRight: false,
       command: '',
@@ -18,6 +18,7 @@ class Terminal extends Component {
       apiConditionSources: '',
       apiConditionDate: '',
       apiConditionKeyword: '',
+      loading: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -34,6 +35,10 @@ class Terminal extends Component {
   getNewsData(url) {
     const { page, newsData } = this.state;
 
+    this.setState({
+      loading: true,
+    });
+
     axios.get(url)
       .then((response) => {
         if (page === 1) {
@@ -41,6 +46,7 @@ class Terminal extends Component {
             sectionIndex: 3,
             newsData: response.data.articles,
             page: 2,
+            loading: false,
           });
         } else {
           this.setState({
@@ -49,12 +55,16 @@ class Terminal extends Component {
               ...response.data.articles,
             ],
             page: page + 1,
+            loading: false,
           });
         }
 
         this.isAjaxCallDone = true;
       })
-      .catch(err => console.error('axios newsData부분', err));
+      .catch((err) => {
+        this.setState({ loading: false });
+        console.error('axios newsData부분', err);
+      });
   }
 
   setApiConditions(type, condition) {
@@ -78,10 +88,11 @@ class Terminal extends Component {
   }
 
   handleScroll(ev) {
-    const { apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page } = this.ajaxCallInput;
-
     if (ev.currentTarget.scrollTop / (ev.currentTarget.scrollHeight - ev.currentTarget.clientHeight) > 0.8 &&
       this.isAjaxCallDone) {
+      const { apiConditionKeyword, apiConditionSources, apiConditionDate, page } = this.state;
+      const [dateFrom, dateTo] = apiConditionDate;
+
       this.isAjaxCallDone = false;
       this.handleSearch(apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page);
     }
@@ -110,9 +121,10 @@ class Terminal extends Component {
   }
 
   handleChange(ev) {
-    if (ev.currentTarget.value === 'Help' || ev.currentTarget.value === 'Source' || ev.currentTarget.value === 'Keyword'
-    || ev.currentTarget.value === 'Date' || ev.currentTarget.value === 'Search' || ev.currentTarget.value === 'Card'
-    || ev.currentTarget.value === 'List') {
+    console.log(this);
+    if (ev.currentTarget.value === 'Help' || ev.currentTarget.value === 'Source' || ev.currentTarget.value === 'Keyword' ||
+        ev.currentTarget.value === 'Date' || ev.currentTarget.value === 'Search' || ev.currentTarget.value === 'Card' ||
+        ev.currentTarget.value === 'List') {
       this.setState({
         isRight: true,
       });
@@ -156,7 +168,6 @@ class Terminal extends Component {
 
           this.setState({ page: 1 });
           this.handleSearch(apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page);
-          this.ajaxCallInput = { apiConditionKeyword, apiConditionSources, dateFrom, dateTo, page };
         } else {
           alert('You must select at least one of the Sources or Keywords.');
         }
@@ -167,7 +178,7 @@ class Terminal extends Component {
   }
 
   render() {
-    const { sectionIndex, newsData, viewType, isRight, command } = this.state;
+    const { sectionIndex, newsData, viewType, isRight, command, loading } = this.state;
     const { onClick } = this.props;
     const checkSectionIndex = (index, type) => {
       if (type === 'class') {
@@ -214,9 +225,7 @@ class Terminal extends Component {
                 <Contents onClick={onClick} newsData={newsData} viewType={viewType} />
               </div>
             </section>
-            <div>
-              {/* <Loading progressRate={this.props.progressRate} /> */}
-            </div>
+            {loading && <Loader />}
           </div>
         </div>
       </React.Fragment>

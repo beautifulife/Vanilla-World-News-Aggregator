@@ -1,0 +1,10 @@
+.Date-text {
+  margin: 0 0 5px 0;
+  color: #f1f1f0;
+}
+
+.Date-text-input {
+  width: calc(100% - 30px);
+  margin-left: 10px;
+  color: #ff5b56;
+}

@@ -39,12 +39,12 @@ class Date extends Component {
     const { isRight, value } = this.state;
 
     return (
-      <fieldset className="Source-text">
+      <fieldset className="Date-text">
         <legend>Select Date:</legend>
         <input
           type="text"
           value={value}
-          className={isRight ? 'Search-text-input right' : 'Search-text-input'}
+          className={isRight ? 'Date-text-input right' : 'Date-text-input'}
           onChange={this.handleChange}
           onKeyDown={this.handleKeydown}
           placeholder="choose from-date and to-date like 2019-01-05~2019-01-07"

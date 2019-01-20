@@ -1,0 +1,13 @@
+.Loader-wrapper {
+  position: fixed;
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
+  font-size: 40px;
+  color: #5af78d;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

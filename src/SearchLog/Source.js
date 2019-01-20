@@ -86,7 +86,7 @@ class Source extends Component {
           <input
             type="text"
             value={choosedValue}
-            className={isRight ? 'Search-text-input right' : 'Search-text-input'}
+            className={isRight ? 'Source-text-input right' : 'Source-text-input'}
             onChange={this.handleChange}
             onKeyDown={ev => this.handleKeydown(ev, sourceIndexMap)}
             placeholder='choose news sources like "1,2,3,4,5..." until 20source possible'

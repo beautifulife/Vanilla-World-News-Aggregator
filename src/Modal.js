@@ -10,12 +10,9 @@ class Modal extends Component {
     }
   }
 
-  handleError(ev) {
-    ev.currentTarget.src = './asset/image/sub_img.png';
-  }
-
   render() {
     const { article } = this.props;
+    const imageStyle = { backgroundImage: `url(${article.urlToImage}), url(./asset/image/sub_img.png)` };
 
     return (
       <div className="Modal-background" onClick={this.handleClick.bind(this)}>
@@ -23,7 +20,7 @@ class Modal extends Component {
           <h1 className="Modal-contents-title">{article.title}</h1>
           <div className="Modal-contents-info-wrapper">
 
-            <img className="Modal-contents-image" src={article.urlToImage || './asset/image/sub_img.png'} alt={article.title} onError={this.handleError.bind(this)} />
+            <div className="Modal-contents-image" style={imageStyle} alt={article.title} />
             <div className="Modal-contents-subInfo-wrapper">
               <span className="Modal-contents-subInfo">
                 <span>Source:</span>

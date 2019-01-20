@@ -21,14 +21,14 @@
   cursor: pointer;
 }
 
-.Contents-list-item > span {
+.Contents-list-item-subInfo {
+  margin-left: 30px;
+}
+
+.Contents-list-item-subInfo > span {
   margin: 0px 3px;
   font-size: 0.7rem;
   color: #f1f1f0b2;
-}
-
-.Contents-list-item > span:first-of-type {
-  margin-left: 30px;
 }
 
 .Contents-card {
@@ -54,7 +54,10 @@
 
 .Contents-card-item-img {
   filter: grayscale(1);
+  background-size: cover;
+  background-position: center center;
   width: 150px;
+  height: 85px;
   cursor: pointer;
 }
 
@@ -68,4 +71,9 @@
 .Contents-card-item-author {
   font-size: 0.7rem;
   color: #f1f1f0b2;
+}
+
+.Contents-empty {
+  margin-top: 50px;
+  text-align: center;
 }

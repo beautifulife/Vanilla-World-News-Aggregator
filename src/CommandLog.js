@@ -43,7 +43,6 @@ class Search extends Component {
         case 'Date':
           return <Date onSet={onSet} />;
         default:
-          console.error(command);
       }
     };
 
