@@ -16,30 +16,36 @@ class Contents extends Component {
 
     const makeNewsItem = () => {
       if (viewType === 'List') {
-        return newsData.map((article, index) => (
-          <li key={index + 1} className="Contents-list-item">
-            <span className="Contents-list-item-title" onClick={ev => this.handleClick(ev, article)}>
-              <span className="Contents-list-item-index">{index + 1}</span>
-              {article.title}
-            </span>
-            <div className="Contents-list-item-subInfo">
-              <span>{article.source.name}</span>
-              <span>|</span>
-              <span>{article.author}</span>
-              <span>|</span>
-              <span>{new Date(article.publishedAt).toString()}</span>
-            </div>
-          </li>
-        ));
+        return newsData.map((article, index) => {
+          const keyIndex = article.publishedAt + (index + Math.random()).toString();
+
+          return (
+            <li key={keyIndex} className="Contents-list-item">
+              <span className="Contents-list-item-title" onClick={ev => this.handleClick(ev, article)}>
+                <span className="Contents-list-item-index">{index + 1}</span>
+                {article.title}
+              </span>
+              <div className="Contents-list-item-subInfo">
+                <span>{article.source.name}</span>
+                <span>|</span>
+                <span>{article.author}</span>
+                <span>|</span>
+                <span>{new Date(article.publishedAt).toString()}</span>
+              </div>
+            </li>
+          );
+        });
       }
 
       return newsData.map((article, index) => {
+        const keyIndex = article.publishedAt + (index + Math.random()).toString();
+
         const cardViewImageStyle = {
           backgroundImage: `url(${article.urlToImage}), url(${subImage})`,
         };
 
         return (
-          <li key={index + 1} className="Contents-card-item">
+          <li key={keyIndex} className="Contents-card-item">
             <div
               className="Contents-card-item-img"
               style={cardViewImageStyle}

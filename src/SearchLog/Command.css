@@ -1,0 +1,13 @@
+.Command-text-arrow {
+  display: inline-block;
+  width: 15px;
+  margin: 0 0 5px 0;
+  font-weight: 700;
+  color: #5af78d;
+}
+
+.Command-text-input.right {
+  width: calc(100% - 30px);
+  margin-left: 5px;
+  color: #5af78d;
+}

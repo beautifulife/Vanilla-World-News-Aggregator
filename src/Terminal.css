@@ -52,13 +52,6 @@
   left: 20%;
 }
 
-/* .Terminal-main-command.active {
-  background-image: url(./asset/image/terminal_main.png);
-  background-position: center 70%;
-  background-size: 60%;
-  background-repeat: no-repeat;
-} */
-
 .Terminal-main-command-path {
   margin: 0 0 5px 0;
   color: #57c7fe;

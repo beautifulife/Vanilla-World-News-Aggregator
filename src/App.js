@@ -6,6 +6,7 @@ import Modal from './Modal';
 class App extends Component {
   constructor() {
     super();
+
     this.state = {
       contents: '',
     };
