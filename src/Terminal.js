@@ -18,19 +18,21 @@ class Terminal extends Component {
       loading: false,
       command: '',
       apiConditionSources: '',
-      apiConditionDate: '',
+      apiConditionDate: [],
       apiConditionKeyword: '',
       viewType: 'List',
-      newsData: '',
+      newsData: {},
     };
 
+    this.page = 1;
+    this.isAjaxCallDone = false;
+    this.inputRef = React.createRef();
     this.setApiConditions = this.setApiConditions.bind(this);
     this.handleSectionToggle = this.handleSectionToggle.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleInputKeydown = this.handleInputKeydown.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
     this.handleContentsViewType = this.handleContentsViewType.bind(this);
     this.handleContentsScroll = this.handleContentsScroll.bind(this);
-    this.inputRef = React.createRef();
   }
 
   getNewsData(url) {
@@ -45,24 +47,25 @@ class Terminal extends Component {
         if (this.page === 1) {
           this.setState({
             sectionIndex: 3,
-            newsData: response.data.articles,
+            newsData: response.data,
             loading: false,
           });
 
           this.page = 2;
         } else {
           this.setState({
-            newsData: [
-              ...newsData,
-              ...response.data.articles,
-            ],
+            newsData: {
+              articles: [
+                ...newsData.articles,
+                ...response.data.articles,
+              ],
+            },
             loading: false,
           });
 
           this.page += 1;
         }
 
-        console.log(response);
         if (response.data.articles.length === 30) {
           this.isAjaxCallDone = true;
         }
@@ -71,7 +74,8 @@ class Terminal extends Component {
         this.setState({
           loading: false,
         });
-        console.error('axios newsData부분', err);
+
+        console.error(err);
       });
   }
 
@@ -89,6 +93,10 @@ class Terminal extends Component {
         apiConditionKeyword: condition,
       });
     }
+
+    this.setState({
+      command: '',
+    });
 
     this.handleInputFocus();
   }
@@ -117,7 +125,7 @@ class Terminal extends Component {
           sectionIndex: 3,
         });
 
-        if (apiConditionDate) {
+        if (apiConditionDate.length) {
           [dateFrom, dateTo] = apiConditionDate;
         }
 
@@ -127,7 +135,7 @@ class Terminal extends Component {
         alert('You must select at least one of the Sources or Keywords.');
       }
     } else if (command === 'Card' || command === 'List') {
-      if (newsData.length) {
+      if (newsData.articles.length) {
         this.handleContentsViewType(command);
       } else {
         alert('You can change the view, when you have search results');
@@ -141,7 +149,7 @@ class Terminal extends Component {
     });
   }
 
-  handleInputChange(ev) {
+  handleChange(ev) {
     if (ev.currentTarget.value === 'Help' || ev.currentTarget.value === 'Source' || ev.currentTarget.value === 'Keyword' ||
         ev.currentTarget.value === 'Date' || ev.currentTarget.value === 'Search' || ev.currentTarget.value === 'Card' ||
         ev.currentTarget.value === 'List') {
@@ -157,7 +165,7 @@ class Terminal extends Component {
     }
   }
 
-  handleInputKeydown(ev) {
+  handleKeydown(ev) {
     const { isRight } = this.state;
 
     if (ev.keyCode === 13) {
@@ -168,7 +176,6 @@ class Terminal extends Component {
           inputValue: '',
         });
       } else {
-        console.error('error wrong command input');
         alert('Wrong command! please check commands, using "Help" command');
       }
     }
@@ -199,7 +206,7 @@ class Terminal extends Component {
 
   handleContentsScroll(ev) {
     if (ev.currentTarget.scrollTop / (ev.currentTarget.scrollHeight - ev.currentTarget.clientHeight) > 0.8 &&
-      this.isAjaxCallDone) {
+        this.isAjaxCallDone) {
       const { apiConditionKeyword, apiConditionSources, apiConditionDate } = this.state;
       const [dateFrom, dateTo] = apiConditionDate;
 
@@ -236,8 +243,8 @@ class Terminal extends Component {
               value={inputValue}
               placeholder="If you want to know about the command, type 'Help' keyword"
               autoFocus
-              onChange={this.handleInputChange}
-              onKeyDown={this.handleInputKeydown}
+              onChange={this.handleChange}
+              onKeyDown={this.handleKeydown}
               ref={this.inputRef}
             />
             <div className="Terminal-main-command-help">

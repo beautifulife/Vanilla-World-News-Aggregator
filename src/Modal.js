@@ -8,7 +8,7 @@ class Modal extends Component {
     if (ev.target.classList.contains('Modal-background')) {
       const { onClick } = this.props;
 
-      onClick('');
+      onClick({});
     }
   }
 
@@ -21,7 +21,6 @@ class Modal extends Component {
         <div className="Modal-contents">
           <h1 className="Modal-contents-title">{contents.title}</h1>
           <div className="Modal-contents-info-wrapper">
-
             <div className="Modal-contents-image" style={imageStyle} alt={contents.title} />
             <div className="Modal-contents-subInfo-wrapper">
               <span className="Modal-contents-subInfo">

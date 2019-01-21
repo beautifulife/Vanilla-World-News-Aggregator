@@ -8,7 +8,7 @@ class App extends Component {
     super();
 
     this.state = {
-      contents: '',
+      contents: {},
     };
 
     this.handleModalStatus = this.handleModalStatus.bind(this);
@@ -29,7 +29,8 @@ class App extends Component {
           <a href="/" className="App-header">CodeNews</a>
         </header>
         <Terminal onClick={this.handleModalStatus} />
-        {contents && <Modal contents={contents} onClick={this.handleModalStatus} />}
+        {!!Object.keys(contents).length &&
+          <Modal contents={contents} onClick={this.handleModalStatus} />}
         <footer className="App-footer">Any question? &nbsp; beautifulife.github.io</footer>
       </div>
     );

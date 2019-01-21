@@ -8,7 +8,7 @@ class Date extends Component {
 
     this.state = {
       isRight: false,
-      value: '',
+      inputValue: '',
       isDone: false,
     };
 
@@ -25,10 +25,12 @@ class Date extends Component {
   }
 
   handleChange(ev) {
-    this.setState({
-      isRight: true,
-      value: ev.currentTarget.value,
-    });
+    if (ev.currentTarget.value) {
+      this.setState({
+        isRight: true,
+        inputValue: ev.currentTarget.value,
+      });
+    }
   }
 
   handleKeydown(ev) {
@@ -46,13 +48,13 @@ class Date extends Component {
         onCommand('Date', ev.currentTarget.value);
         onSet('date', splittedValue);
       } else {
-        console.error('error wrong command input');
+        alert('Wrong date type input, please check your command');
       }
     }
   }
 
   render() {
-    const { isRight, value, isDone } = this.state;
+    const { isRight, inputValue, isDone } = this.state;
     const { isLog, savedValue } = this.props;
 
     const chooseInputOrSpan = () => {
@@ -64,7 +66,7 @@ class Date extends Component {
         <input
           className={isRight ? 'Date-text-input right' : 'Date-text-input'}
           type="text"
-          value={value}
+          value={inputValue}
           placeholder="choose from-date and to-date like 2019-01-05~2019-01-07"
           autoFocus
           onChange={this.handleChange}
@@ -89,7 +91,7 @@ class Date extends Component {
 Date.propTypes = {
   onSet: PropTypes.func,
   onCommand: PropTypes.func,
-  isLog: PropTypes.bool,
+  isLog: PropTypes.bool.isRequired,
   savedValue: PropTypes.string,
 };
 

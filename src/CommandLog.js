@@ -13,7 +13,7 @@ class CommandLog extends Component {
     super(props);
 
     this.state = {
-      sources: '',
+      sources: [],
       commandLog: [],
     };
 
@@ -21,17 +21,13 @@ class CommandLog extends Component {
   }
 
   componentDidMount() {
-    const { sources } = this.state;
-
-    if (!sources) {
-      axios.get('https://newsapi.org/v2/sources?apiKey=cc59bebdf1734c19ab68da14ba034986')
-        .then((response) => {
-          this.setState({
-            sources: response.data.sources,
-          });
-        })
-        .catch(err => console.error('axios source부분', err));
-    }
+    axios.get('https://newsapi.org/v2/sources?apiKey=cc59bebdf1734c19ab68da14ba034986')
+      .then((response) => {
+        this.setState({
+          sources: response.data.sources,
+        });
+      })
+      .catch(err => console.error(err));
   }
 
   handleCommandLog(command, value) {

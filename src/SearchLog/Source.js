@@ -8,8 +8,7 @@ class Source extends Component {
 
     this.state = {
       isRight: false,
-      value: '',
-      limitSize: false,
+      inputValue: '',
       isDone: false,
     };
 
@@ -29,25 +28,21 @@ class Source extends Component {
   handleChange(ev) {
     const splittedValue = ev.currentTarget.value.split(',');
 
-    this.setState({
-      isRight: true,
-      value: splittedValue,
-    });
-
-    if (splittedValue.length > 20) {
+    if (ev.currentTarget.value && splittedValue.length <= 20) {
       this.setState({
-        limitSize: true,
+        isRight: true,
+        inputValue: splittedValue,
       });
     }
   }
 
   handleKeydown(ev, sourceIndexMap) {
-    const { isRight, value } = this.state;
+    const { isRight, inputValue } = this.state;
     const { onSet, onCommand } = this.props;
 
     if (ev.keyCode === 13) {
       if (isRight) {
-        const sourceIdList = value.map(item => sourceIndexMap[item]);
+        const sourceIdList = inputValue.map(item => sourceIndexMap[item]);
 
         this.setState({
           isDone: true,
@@ -56,31 +51,24 @@ class Source extends Component {
         onCommand('Source', ev.currentTarget.value);
         onSet('source', sourceIdList);
       } else {
-        console.error('error wrong command input');
+        alert('Wrong sources input, please check your command');
       }
     }
   }
 
   handleClick(ev) {
-    const { limitSize, value } = this.state;
+    const { inputValue } = this.state;
+    const newValue = [...inputValue, ev.currentTarget.firstElementChild.textContent];
 
-    if (!limitSize) {
-      const newValue = [...value, ev.currentTarget.firstElementChild.textContent];
-
+    if (newValue.length <= 20) {
       this.setState({
-        value: newValue,
+        inputValue: newValue,
       });
-
-      if (value.length === 20) {
-        this.setState({
-          limitSize: true,
-        });
-      }
     }
   }
 
   render() {
-    const { isRight, value, limitSize, isDone } = this.state;
+    const { isRight, inputValue, isDone } = this.state;
     const { sources, isLog, savedValue } = this.props;
     const sourceIndexMap = {};
 
@@ -106,9 +94,8 @@ class Source extends Component {
         <input
           className={isRight ? 'Source-text-input right' : 'Source-text-input'}
           type="text"
-          value={value}
+          value={inputValue}
           placeholder='choose news sources like "1,2,3,4,5..." until 20source possible'
-          disabled={limitSize}
           autoFocus
           onChange={this.handleChange}
           onKeyDown={ev => this.handleKeydown(ev, sourceIndexMap)}
@@ -124,7 +111,7 @@ class Source extends Component {
               {sourceItem}
             </ul>
             <fieldset className="Source-text">
-              <legend>Select Sources:</legend>
+              <legend>Select Sources: {isLog ? savedValue.split(',').length : inputValue.length}</legend>
               {chooseInputOrSpan()}
             </fieldset>
           </React.Fragment>
@@ -138,7 +125,7 @@ Source.propTypes = {
   onSet: PropTypes.func,
   onCommand: PropTypes.func,
   sources: PropTypes.instanceOf(Array).isRequired,
-  isLog: PropTypes.bool,
+  isLog: PropTypes.bool.isRequired,
   savedValue: PropTypes.string,
 };
 

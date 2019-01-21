@@ -16,7 +16,7 @@ class Contents extends Component {
 
     const makeNewsItem = () => {
       if (viewType === 'List') {
-        return newsData.map((article, index) => {
+        return newsData.articles.map((article, index) => {
           const keyIndex = article.publishedAt + (index + Math.random()).toString();
 
           return (
@@ -37,7 +37,7 @@ class Contents extends Component {
         });
       }
 
-      return newsData.map((article, index) => {
+      return newsData.articles.map((article, index) => {
         const keyIndex = article.publishedAt + (index + Math.random()).toString();
 
         const cardViewImageStyle = {
@@ -67,14 +67,15 @@ class Contents extends Component {
 
     return (
       <ul className={viewType === 'List' ? 'Contents-list' : 'Contents-card'}>
-        {Array.isArray(newsData) && makeNewsItem()}
-        {(Array.isArray(newsData) && !newsData.length) && emptyNewsItem}
+        {(newsData.articles && !!newsData.articles.length) && makeNewsItem()}
+        {(!!Object.keys(newsData).length && !newsData.articles.length) && emptyNewsItem}
       </ul>
     );
   }
 }
 
 Contents.propTypes = {
+  newsData: PropTypes.instanceOf(Object).isRequired,
   onClick: PropTypes.func.isRequired,
   viewType: PropTypes.string.isRequired,
 };

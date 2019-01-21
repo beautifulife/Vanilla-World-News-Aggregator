@@ -8,7 +8,7 @@ class Keyword extends Component {
 
     this.state = {
       isRight: false,
-      value: '',
+      inputValue: '',
       isDone: false,
     };
 
@@ -25,10 +25,12 @@ class Keyword extends Component {
   }
 
   handleChange(ev) {
-    this.setState({
-      isRight: true,
-      value: ev.currentTarget.value,
-    });
+    if (ev.currentTarget.value) {
+      this.setState({
+        isRight: true,
+        inputValue: ev.currentTarget.value,
+      });
+    }
   }
 
   handleKeydown(ev) {
@@ -44,14 +46,14 @@ class Keyword extends Component {
         onCommand('Keyword', ev.currentTarget.value);
         onSet('keyword', ev.currentTarget.value);
       } else {
-        console.error('error wrong command input');
+        alert('Wrong keyword input, please check your command');
       }
     }
   }
 
   render() {
-    const { isRight, value, isDone } = this.state;
-    const { savedValue, isLog } = this.props;
+    const { isRight, inputValue, isDone } = this.state;
+    const { isLog, savedValue } = this.props;
 
     const chooseInputOrSpan = () => {
       if (isLog) {
@@ -62,7 +64,7 @@ class Keyword extends Component {
         <input
           className={isRight ? 'Keyword-text-input right' : 'Keyword-text-input'}
           type="text"
-          value={value}
+          value={inputValue}
           placeholder="enter keyword, want to search"
           autoFocus
           onKeyDown={this.handleKeydown}
@@ -87,7 +89,7 @@ class Keyword extends Component {
 Keyword.propTypes = {
   onSet: PropTypes.func,
   onCommand: PropTypes.func,
-  isLog: PropTypes.bool,
+  isLog: PropTypes.bool.isRequired,
   savedValue: PropTypes.string,
 };
 
