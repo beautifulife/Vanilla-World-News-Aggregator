@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Contents.css';
+import subImage from './asset/image/sub_img.png';
 
 // const imageToAscii = require('image-to-ascii');
 class Contents extends Component {
@@ -25,7 +27,7 @@ class Contents extends Component {
               <span>|</span>
               <span>{article.author}</span>
               <span>|</span>
-              <span>{article.publishedAt}</span>
+              <span>{new Date(article.publishedAt).toString()}</span>
             </div>
           </li>
         ));
@@ -33,7 +35,7 @@ class Contents extends Component {
 
       return newsData.map((article, index) => {
         const cardViewImageStyle = {
-          backgroundImage: `url(${article.urlToImage}), url(./asset/image/sub_img.png)`,
+          backgroundImage: `url(${article.urlToImage}), url(${subImage})`,
         };
 
         return (
@@ -65,5 +67,10 @@ class Contents extends Component {
     );
   }
 }
+
+Contents.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  viewType: PropTypes.string.isRequired,
+};
 
 export default Contents;

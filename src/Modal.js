@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Modal.css';
+import subImage from './asset/image/sub_img.png';
 
 class Modal extends Component {
   handleClick(ev) {
@@ -11,45 +13,50 @@ class Modal extends Component {
   }
 
   render() {
-    const { article } = this.props;
-    const imageStyle = { backgroundImage: `url(${article.urlToImage}), url(./asset/image/sub_img.png)` };
+    const { contents } = this.props;
+    const imageStyle = { backgroundImage: `url(${contents.urlToImage}), url(${subImage})` };
 
     return (
       <div className="Modal-background" onClick={this.handleClick.bind(this)}>
         <div className="Modal-contents">
-          <h1 className="Modal-contents-title">{article.title}</h1>
+          <h1 className="Modal-contents-title">{contents.title}</h1>
           <div className="Modal-contents-info-wrapper">
 
-            <div className="Modal-contents-image" style={imageStyle} alt={article.title} />
+            <div className="Modal-contents-image" style={imageStyle} alt={contents.title} />
             <div className="Modal-contents-subInfo-wrapper">
               <span className="Modal-contents-subInfo">
                 <span>Source:</span>
-                <span>{article.source.name}</span>
+                <span>{contents.source.name}</span>
               </span>
               <span className="Modal-contents-subInfo">
                 <span>Author:</span>
-                <span>{article.author}</span>
+                <span>{contents.author}</span>
               </span>
               <span className="Modal-contents-subInfo">
                 <span>Date:</span>
-                <span>{article.publishedAt}</span>
+                <span>{new Date(contents.publishedAt).toString()}</span>
               </span>
               <span className="Modal-contents-subInfo">
                 <span>Url:</span>
-                <span>{article.url}</span>
+                <span>{contents.url}</span>
               </span>
             </div>
           </div>
           <div className="Modal-contents-main">
             <p className="Modal-contents-main-description">Description:</p>
-            <p>{article.description}</p>
+            <p>{contents.description}</p>
             <p className="Modal-contents-main-content">Contents:</p>
-            <p>{article.content}</p>
+            <p>{contents.content}</p>
           </div>
         </div>
       </div>
     );
   }
 }
+
+Modal.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  contents: PropTypes.instanceOf(Object).isRequired,
+};
 
 export default Modal;
