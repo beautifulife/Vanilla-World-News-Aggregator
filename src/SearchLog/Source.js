@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Source.css';
 
 class Source extends Component {
@@ -22,7 +23,7 @@ class Source extends Component {
       choosedValue: splittedValue,
     });
 
-    if (splittedValue.length === 20) {
+    if (splittedValue.length > 20) {
       this.setState({
         limitSize: true,
       });
@@ -98,5 +99,10 @@ class Source extends Component {
     );
   }
 }
+
+Source.propTypes = {
+  onSet: PropTypes.func.isRequired,
+  sources: PropTypes.instanceOf(Array).isRequired,
+};
 
 export default Source;

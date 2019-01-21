@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Keyword.css';
 
 class Keyword extends Component {
@@ -52,5 +53,9 @@ class Keyword extends Component {
     );
   }
 }
+
+Keyword.propTypes = {
+  onSet: PropTypes.func.isRequired,
+};
 
 export default Keyword;

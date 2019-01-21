@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './Date.css';
 
 class Date extends Component {
@@ -54,5 +55,9 @@ class Date extends Component {
     );
   }
 }
+
+Date.propTypes = {
+  onSet: PropTypes.func.isRequired,
+};
 
 export default Date;

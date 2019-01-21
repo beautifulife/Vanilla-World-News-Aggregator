@@ -7,26 +7,28 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      article: '',
+      contents: '',
     };
 
     this.handleModalStatus = this.handleModalStatus.bind(this);
   }
 
-  handleModalStatus(article) {
+  handleModalStatus(contents) {
     this.setState({
-      article,
+      contents,
     });
   }
 
   render() {
-    const { article } = this.state;
+    const { contents } = this.state;
 
     return (
       <div className="App">
-        <a href="/"><header className="App-header">CodeNews</header></a>
+        <header>
+          <a href="/" className="App-header">CodeNews</a>
+        </header>
         <Terminal onClick={this.handleModalStatus} />
-        {article && <Modal article={article} onClick={this.handleModalStatus} />}
+        {contents && <Modal contents={contents} onClick={this.handleModalStatus} />}
         <footer className="App-footer">Any question? &nbsp; beautifulife.github.io</footer>
       </div>
     );

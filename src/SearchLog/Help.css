@@ -3,6 +3,11 @@
   color: #f1f1f0;
 }
 
-.Help-list span {
+.Help-list li {
+  margin-bottom: 5px;
+}
+
+.Help-list b {
+  margin-left: 5px;
   color: #5af78d;
 }

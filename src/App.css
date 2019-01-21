@@ -2,16 +2,22 @@
   display: flex;
   flex-direction: column;
   text-align: center;
+  min-width: 800px;
   height: 100vh;
   margin: 0px auto;
 }
 
 .App-header {
+  display: inline-block;
   margin: 20px 0;
   font-size: calc(35px + 2vmin);
   font-family: 'Libre Barcode 128 Text', cursive;
   color: rgba(0, 0, 0, 0.8);
   cursor: pointer;
+}
+
+.App > a {
+  display: inline-block;
 }
 
 .App-footer {

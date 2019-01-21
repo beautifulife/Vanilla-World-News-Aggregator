@@ -11,7 +11,6 @@
 
 .Contents-list-item-index {
   display: inline-block;
-  width: 15px;
   margin-right: 10px;
   text-align: right;
 }
@@ -22,13 +21,14 @@
 }
 
 .Contents-list-item-subInfo {
-  margin-left: 30px;
+  margin-left: 25px;
 }
 
 .Contents-list-item-subInfo > span {
   margin: 0px 3px;
   font-size: 0.7rem;
   color: #f1f1f0b2;
+  word-break: break-all;
 }
 
 .Contents-card {
@@ -50,6 +50,7 @@
 .Contents-card-item > span {
   display: inline-block;
   padding: 5px;
+  word-break: break-all;
 }
 
 .Contents-card-item-img {

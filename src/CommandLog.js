@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 import './CommandLog.css';
+import axios from 'axios';
 import Help from './SearchLog/Help';
 import Command from './SearchLog/Command';
 import Date from './SearchLog/Date';
 import Keyword from './SearchLog/Keyword';
 import Source from './SearchLog/Source';
 
-class Search extends Component {
+class CommandLog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sources: null,
+      sources: '',
+      commandLog: [],
     };
   }
 
@@ -28,9 +30,38 @@ class Search extends Component {
     }
   }
 
+  saveCommandLog(command, value) {
+    const { commandLog } = this.state;
+
+    this.setState({
+      commandLog: [
+        ...commandLog,
+        {
+          command,
+          value,
+        },
+      ],
+    });
+  }
+
   render() {
-    const { sources } = this.state;
+    const { sources, commandLog } = this.state;
     const { command, onSet } = this.props;
+
+    const renderedItem = commandLog.map((item, index) => {
+      switch (item.command) {         
+        case 'Help':
+          return <Help />;
+        case 'Source':
+          return <Source sources={sources} isLog="true" value={item.value} />;
+        case 'Keyword':
+          return <Keyword isLog="true" value={item.value} />;
+        case 'Date':
+          return <Date isLog="true" value={item.value} />;
+        default:
+          return <Command value={item.value} />;
+      }
+    });
 
     const renderByCommand = () => {
       switch (command) {
@@ -48,10 +79,16 @@ class Search extends Component {
 
     return (
       <React.Fragment>
+        {renderedItem}
         {renderByCommand()}
       </React.Fragment>
     );
   }
 }
 
-export default Search;
+CommandLog.propTypes = {
+  onSet: PropTypes.func.isRequired,
+  command: PropTypes.string.isRequired,
+};
+
+export default CommandLog;
