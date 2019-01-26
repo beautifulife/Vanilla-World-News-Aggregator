@@ -4,19 +4,19 @@ import './Command.css';
 
 class Command extends Component {
   render() {
-    const { savedValue } = this.props;
+    const { logValue } = this.props;
 
     return (
       <React.Fragment>
         <span className="Command-text-arrow">&rarr;</span>
-        <span type="text" className="Command-text-input right">{savedValue}</span>
+        <span type="text" className="Command-text-input right">{logValue}</span>
       </React.Fragment>
     );
   }
 }
 
 Command.propTypes = {
-  savedValue: PropTypes.string.isRequired,
+  logValue: PropTypes.string.isRequired,
 };
 
 export default Command;

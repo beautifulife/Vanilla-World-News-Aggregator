@@ -4,11 +4,11 @@ import './Modal.css';
 import subImage from './asset/image/sub_img.png';
 
 class Modal extends Component {
-  handleClick(ev) {
+  handleClickBackground(ev) {
     if (ev.target.classList.contains('Modal-background')) {
       const { onClick } = this.props;
 
-      onClick({});
+      onClick();
     }
   }
 
@@ -17,7 +17,7 @@ class Modal extends Component {
     const imageStyle = { backgroundImage: `url(${contents.urlToImage}), url(${subImage})` };
 
     return (
-      <div className="Modal-background" onClick={this.handleClick.bind(this)}>
+      <div className="Modal-background" onClick={this.handleClickBackground.bind(this)}>
         <div className="Modal-contents">
           <h1 className="Modal-contents-title">{contents.title}</h1>
           <div className="Modal-contents-info-wrapper">

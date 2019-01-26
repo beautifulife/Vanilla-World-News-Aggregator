@@ -2,19 +2,18 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import './CommandLog.css';
 import axios from 'axios';
-import Command from './SearchLog/Command';
-import Help from './SearchLog/Help';
-import Source from './SearchLog/Source';
-import Keyword from './SearchLog/Keyword';
-import Date from './SearchLog/Date';
+import Command from './CommandLog/Command';
+import Keyword from './CommandLog/Keyword';
+import Source from './CommandLog/Source';
+import TermDates from './CommandLog/TermDates';
 
 class CommandLog extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      sources: [],
       commandLog: [],
+      sources: [],
     };
 
     this.handleCommandLog = this.handleCommandLog.bind(this);
@@ -46,23 +45,42 @@ class CommandLog extends Component {
 
   render() {
     const { sources, commandLog } = this.state;
-    const { command, onSet } = this.props;
+    const { command, onInput } = this.props;
     let isLog;
 
+    const helpMessage = (
+      <ul className="help-list">
+        <li>Service : This service aggregate news from 'https://newsapi.org/'</li>
+        <li>
+          Command :
+          <ul>
+            <li><b>Source</b> (Select news sources)</li>
+            <li><b>Date</b> (Select specific date)</li>
+            <li><b>Keyword</b> (Select keyword)</li>
+            <li><b>Search</b> (Start search, after choosing at least one of source or keyword)</li>
+            <li><b>List</b> (Show list view, after Search command)</li>
+            <li><b>Card</b> (Show card view, after Search command)</li>
+          </ul>
+        </li>
+        <li>Default : Source(All sources), Date(The newest), Keyword(All articles)</li>
+        <li>Sort : Popularity</li>
+      </ul>
+    );
+
     const renderedItem = commandLog.map((item, index) => {
-      const keyIndex = item + (index + Math.random()).toString();
+      const keyIndex = item + index.toString();
 
       isLog = true;
 
       switch (item.command) {
         case 'Command':
-          return <Command key={keyIndex} savedValue={item.value} />;
+          return <Command key={keyIndex} logValue={item.value} />;
         case 'Source':
-          return <Source key={keyIndex} sources={sources} isLog={isLog} savedValue={item.value} />;
+          return <Source key={keyIndex} sources={sources} isLog={isLog} logValue={item.value} />;
         case 'Keyword':
-          return <Keyword key={keyIndex} isLog={isLog} savedValue={item.value} />;
+          return <Keyword key={keyIndex} isLog={isLog} logValue={item.value} />;
         case 'Date':
-          return <Date key={keyIndex} isLog={isLog} savedValue={item.value} />;
+          return <TermDates key={keyIndex} isLog={isLog} logValue={item.value} />;
         default:
       }
     });
@@ -72,13 +90,13 @@ class CommandLog extends Component {
 
       switch (command) {
         case 'Help':
-          return <Help />;
+          return helpMessage;
         case 'Source':
-          return <Source sources={sources} isLog={isLog} onSet={onSet} onCommand={this.handleCommandLog} />;
+          return <Source sources={sources} isLog={isLog} onInput={onInput} onInit={this.handleCommandLog} />;
         case 'Keyword':
-          return <Keyword isLog={isLog} onSet={onSet} onCommand={this.handleCommandLog} />;
+          return <Keyword isLog={isLog} onInput={onInput} onInit={this.handleCommandLog} />;
         case 'Date':
-          return <Date isLog={isLog} onSet={onSet} onCommand={this.handleCommandLog} />;
+          return <TermDates isLog={isLog} onInput={onInput} onInit={this.handleCommandLog} />;
         default:
       }
     };
@@ -93,7 +111,7 @@ class CommandLog extends Component {
 }
 
 CommandLog.propTypes = {
-  onSet: PropTypes.func.isRequired,
+  onInput: PropTypes.func.isRequired,
   command: PropTypes.string.isRequired,
 };
 

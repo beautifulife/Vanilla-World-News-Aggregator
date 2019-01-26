@@ -7,24 +7,24 @@ class Keyword extends Component {
     super(props);
 
     this.state = {
-      isRight: false,
       inputValue: '',
       isDone: false,
+      isRight: false,
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKeydown = this.handleKeydown.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleInputKeydown = this.handleInputKeydown.bind(this);
   }
 
   componentDidMount() {
-    const { onCommand } = this.props;
+    const { onInit } = this.props;
 
-    if (onCommand) {
-      onCommand('Command', 'Keyword');
+    if (onInit) {
+      onInit('Command', 'Keyword');
     }
   }
 
-  handleChange(ev) {
+  handleInputChange(ev) {
     if (ev.currentTarget.value) {
       this.setState({
         isRight: true,
@@ -33,9 +33,9 @@ class Keyword extends Component {
     }
   }
 
-  handleKeydown(ev) {
+  handleInputKeydown(ev) {
     const { isRight } = this.state;
-    const { onSet, onCommand } = this.props;
+    const { onInput, onInit } = this.props;
 
     if (ev.keyCode === 13) {
       if (isRight) {
@@ -43,8 +43,8 @@ class Keyword extends Component {
           isDone: true,
         });
 
-        onCommand('Keyword', ev.currentTarget.value);
-        onSet('keyword', ev.currentTarget.value);
+        onInit('Keyword', ev.currentTarget.value);
+        onInput('keyword', ev.currentTarget.value);
       } else {
         alert('Wrong keyword input, please check your command');
       }
@@ -53,11 +53,11 @@ class Keyword extends Component {
 
   render() {
     const { isRight, inputValue, isDone } = this.state;
-    const { isLog, savedValue } = this.props;
+    const { isLog, logValue } = this.props;
 
     const chooseInputOrSpan = () => {
       if (isLog) {
-        return <span className="Keyword-text-input right">{savedValue}</span>;
+        return <span className="Keyword-text-input right">{logValue}</span>;
       }
 
       return (
@@ -67,8 +67,8 @@ class Keyword extends Component {
           value={inputValue}
           placeholder="enter keyword, want to search"
           autoFocus
-          onKeyDown={this.handleKeydown}
-          onChange={this.handleChange}
+          onKeyDown={this.handleInputKeydown}
+          onChange={this.handleInputChange}
         />
       );
     };
@@ -87,10 +87,10 @@ class Keyword extends Component {
 }
 
 Keyword.propTypes = {
-  onSet: PropTypes.func,
-  onCommand: PropTypes.func,
+  onInput: PropTypes.func,
+  onInit: PropTypes.func,
   isLog: PropTypes.bool.isRequired,
-  savedValue: PropTypes.string,
+  logValue: PropTypes.string,
 };
 
 export default Keyword;

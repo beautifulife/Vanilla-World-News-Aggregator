@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import Terminal from './Terminal';
 import Modal from './Modal';
+import Terminal from './Terminal';
 
 class App extends Component {
   constructor() {
@@ -15,9 +15,15 @@ class App extends Component {
   }
 
   handleModalStatus(contents) {
-    this.setState({
-      contents,
-    });
+    if (contents === undefined) {
+      this.setState({
+        contents: {},
+      });
+    } else {
+      this.setState({
+        contents,
+      });
+    }
   }
 
   render() {

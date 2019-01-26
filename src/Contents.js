@@ -5,23 +5,23 @@ import subImage from './asset/image/sub_img.png';
 
 // const imageToAscii = require('image-to-ascii');
 class Contents extends Component {
-  handleClick(ev, article) {
+  handleContentsClick(ev, article) {
     const { onClick } = this.props;
 
     onClick(article);
   }
 
   render() {
-    const { newsData, viewType } = this.props;
+    const { data, viewType } = this.props;
 
     const makeNewsItem = () => {
       if (viewType === 'List') {
-        return newsData.articles.map((article, index) => {
-          const keyIndex = article.publishedAt + (index + Math.random()).toString();
+        return data.map((article, index) => {
+          const keyIndex = article.publishedAt + index.toString();
 
           return (
             <li key={keyIndex} className="Contents-list-item">
-              <span className="Contents-list-item-title" onClick={ev => this.handleClick(ev, article)}>
+              <span className="Contents-list-item-title" onClick={ev => this.handleContentsClick(ev, article)}>
                 <span className="Contents-list-item-index">{index + 1}</span>
                 {article.title}
               </span>
@@ -37,8 +37,8 @@ class Contents extends Component {
         });
       }
 
-      return newsData.articles.map((article, index) => {
-        const keyIndex = article.publishedAt + (index + Math.random()).toString();
+      return data.map((article, index) => {
+        const keyIndex = article.publishedAt + index.toString();
 
         const cardViewImageStyle = {
           backgroundImage: `url(${article.urlToImage}), url(${subImage})`,
@@ -50,9 +50,9 @@ class Contents extends Component {
               className="Contents-card-item-img"
               style={cardViewImageStyle}
               alt={article.title}
-              onClick={ev => this.handleClick(ev, article)}
+              onClick={ev => this.handleContentsClick(ev, article)}
             />
-            <span className="Contents-card-item-title" onClick={ev => this.handleClick(ev, article)}>{article.title}</span><br />
+            <span className="Contents-card-item-title" onClick={ev => this.handleContentsClick(ev, article)}>{article.title}</span><br />
             <span className="Contents-card-item-author">{article.author}</span>
           </li>
         );
@@ -67,15 +67,15 @@ class Contents extends Component {
 
     return (
       <ul className={viewType === 'List' ? 'Contents-list' : 'Contents-card'}>
-        {(newsData.articles && !!newsData.articles.length) && makeNewsItem()}
-        {(!!Object.keys(newsData).length && !newsData.articles.length) && emptyNewsItem}
+        {!!data.length && makeNewsItem()}
+        {!data.length && emptyNewsItem}
       </ul>
     );
   }
 }
 
 Contents.propTypes = {
-  newsData: PropTypes.instanceOf(Object).isRequired,
+  data: PropTypes.instanceOf(Array).isRequired,
   onClick: PropTypes.func.isRequired,
   viewType: PropTypes.string.isRequired,
 };

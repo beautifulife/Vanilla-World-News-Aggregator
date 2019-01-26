@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Terminal.css';
 import axios from 'axios';
-import Help from './SearchLog/Help';
 import CommandLog from './CommandLog';
 import Contents from './Contents';
 import Loader from './Loader';
@@ -12,97 +11,32 @@ class Terminal extends Component {
     super(props);
 
     this.state = {
-      sectionIndex: 1,
+      command: '',
       inputValue: '',
+      isAjaxCallDone: false,
       isRight: false,
       loading: false,
-      command: '',
-      apiConditionSources: '',
-      apiConditionDate: [],
-      apiConditionKeyword: '',
+      newsData: [],
+      newsPage: 1,
+      sectionIndex: 1,
+      selectedDateTerm: [],
+      selectedKeyword: '',
+      selectedSources: '',
       viewType: 'List',
-      newsData: {},
     };
 
-    this.page = 1;
-    this.isAjaxCallDone = false;
     this.inputRef = React.createRef();
-    this.setApiConditions = this.setApiConditions.bind(this);
-    this.handleSectionToggle = this.handleSectionToggle.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKeydown = this.handleKeydown.bind(this);
-    this.handleContentsViewType = this.handleContentsViewType.bind(this);
+
+    this.handleCommandChange = this.handleCommandChange.bind(this);
+    this.handleCommandKeydown = this.handleCommandKeydown.bind(this);
     this.handleContentsScroll = this.handleContentsScroll.bind(this);
-  }
-
-  getNewsData(url) {
-    const { newsData } = this.state;
-
-    this.setState({
-      loading: true,
-    });
-
-    axios.get(url)
-      .then((response) => {
-        if (this.page === 1) {
-          this.setState({
-            sectionIndex: 3,
-            newsData: response.data,
-            loading: false,
-          });
-
-          this.page = 2;
-        } else {
-          this.setState({
-            newsData: {
-              articles: [
-                ...newsData.articles,
-                ...response.data.articles,
-              ],
-            },
-            loading: false,
-          });
-
-          this.page += 1;
-        }
-
-        if (response.data.articles.length === 30) {
-          this.isAjaxCallDone = true;
-        }
-      })
-      .catch((err) => {
-        this.setState({
-          loading: false,
-        });
-
-        console.error(err);
-      });
-  }
-
-  setApiConditions(type, condition) {
-    if (type === 'source') {
-      this.setState({
-        apiConditionSources: condition.join(','),
-      });
-    } else if (type === 'date') {
-      this.setState({
-        apiConditionDate: condition,
-      });
-    } else if (type === 'keyword') {
-      this.setState({
-        apiConditionKeyword: condition,
-      });
-    }
-
-    this.setState({
-      command: '',
-    });
-
-    this.handleInputFocus();
+    this.handleContentsViewType = this.handleContentsViewType.bind(this);
+    this.handleSectionToggle = this.handleSectionToggle.bind(this);
+    this.setApiConditions = this.setApiConditions.bind(this);
   }
 
   controlCommand(command) {
-    const { apiConditionDate, apiConditionKeyword, apiConditionSources, newsData } = this.state;
+    const { selectedDateTerm, selectedKeyword, selectedSources, newsData } = this.state;
 
     this.setState({
       command,
@@ -117,25 +51,23 @@ class Terminal extends Component {
     }
 
     if (command === 'Search') {
-      if (apiConditionSources || apiConditionKeyword) {
+      if (selectedSources || selectedKeyword) {
         let dateFrom = '';
         let dateTo = '';
 
-        this.setState({
-          sectionIndex: 3,
-        });
-
-        if (apiConditionDate.length) {
-          [dateFrom, dateTo] = apiConditionDate;
+        if (selectedDateTerm.length) {
+          [dateFrom, dateTo] = selectedDateTerm;
         }
 
-        this.page = 1;
-        this.handleSearchCommand(apiConditionKeyword, apiConditionSources, dateFrom, dateTo, this.page);
+        this.setState({
+          sectionIndex: 3,
+          newsPage: 1,
+        }, this.handleSearchCommand.bind(this, selectedKeyword, selectedSources, dateFrom, dateTo, this.state.newsPage));
       } else {
         alert('You must select at least one of the Sources or Keywords.');
       }
     } else if (command === 'Card' || command === 'List') {
-      if (newsData.articles.length) {
+      if (newsData.length) {
         this.handleContentsViewType(command);
       } else {
         alert('You can change the view, when you have search results');
@@ -143,13 +75,49 @@ class Terminal extends Component {
     }
   }
 
-  handleSectionToggle(index) {
+  getNewsData(url) {
+    const { newsData, newsPage } = this.state;
+
     this.setState({
-      sectionIndex: index,
+      loading: true,
     });
+
+    axios.get(url)
+      .then((response) => {
+        if (!response.data.articles.length) {
+          return;
+        }
+
+        if (newsPage === 1) {
+          this.setState({
+            sectionIndex: 3,
+            newsData: response.data.articles,
+            loading: false,
+            isAjaxCallDone: true,
+            newsPage: 2,
+          });
+        } else {
+          this.setState({
+            newsData: [
+              ...newsData,
+              ...response.data.articles,
+            ],
+            loading: false,
+            isAjaxCallDone: true,
+            newsPage: newsPage + 1,
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          loading: false,
+        });
+
+        console.error(err);
+      });
   }
 
-  handleChange(ev) {
+  handleCommandChange(ev) {
     if (ev.currentTarget.value === 'Help' || ev.currentTarget.value === 'Source' || ev.currentTarget.value === 'Keyword' ||
         ev.currentTarget.value === 'Date' || ev.currentTarget.value === 'Search' || ev.currentTarget.value === 'Card' ||
         ev.currentTarget.value === 'List') {
@@ -165,7 +133,7 @@ class Terminal extends Component {
     }
   }
 
-  handleKeydown(ev) {
+  handleCommandKeydown(ev) {
     const { isRight } = this.state;
 
     if (ev.keyCode === 13) {
@@ -179,6 +147,37 @@ class Terminal extends Component {
         alert('Wrong command! please check commands, using "Help" command');
       }
     }
+  }
+
+  handleContentsViewType(viewType) {
+    this.setState({
+      sectionIndex: 3,
+      viewType,
+    });
+  }
+
+  handleContentsScroll(ev) {
+    const { isAjaxCallDone } = this.state;
+
+    if (ev.currentTarget.scrollTop / (ev.currentTarget.scrollHeight - ev.currentTarget.clientHeight) > 0.8 &&
+        isAjaxCallDone) {
+      const { selectedKeyword, selectedSources, selectedDateTerm, newsPage } = this.state;
+      const [dateFrom, dateTo] = selectedDateTerm;
+
+      this.setState({
+        isAjaxCallDone: false,
+      }, this.handleSearchCommand.bind(this, selectedKeyword, selectedSources, dateFrom, dateTo, newsPage));
+    }
+  }
+
+  handleInputFocus() {
+    this.inputRef.current.focus();
+  }
+
+  handleSectionToggle(index) {
+    this.setState({
+      sectionIndex: index,
+    });
   }
 
   handleSearchCommand(keyword, sources, dateFrom, dateTo, page) {
@@ -197,31 +196,50 @@ class Terminal extends Component {
     this.getNewsData(url);
   }
 
-  handleContentsViewType(viewType) {
-    this.setState({
-      sectionIndex: 3,
-      viewType,
-    });
-  }
-
-  handleContentsScroll(ev) {
-    if (ev.currentTarget.scrollTop / (ev.currentTarget.scrollHeight - ev.currentTarget.clientHeight) > 0.8 &&
-        this.isAjaxCallDone) {
-      const { apiConditionKeyword, apiConditionSources, apiConditionDate } = this.state;
-      const [dateFrom, dateTo] = apiConditionDate;
-
-      this.isAjaxCallDone = false;
-      this.handleSearchCommand(apiConditionKeyword, apiConditionSources, dateFrom, dateTo, this.page);
+  setApiConditions(type, condition) {
+    if (type === 'source') {
+      this.setState({
+        selectedSources: condition.join(','),
+      });
+    } else if (type === 'date') {
+      this.setState({
+        selectedDateTerm: condition,
+      });
+    } else if (type === 'keyword') {
+      this.setState({
+        selectedKeyword: condition,
+      });
     }
-  }
 
-  handleInputFocus() {
-    this.inputRef.current.focus();
+    this.setState({
+      command: '',
+    });
+
+    this.handleInputFocus();
   }
 
   render() {
     const { sectionIndex, inputValue, newsData, viewType, isRight, command, loading } = this.state;
     const { onClick } = this.props;
+
+    const helpMessage = (
+      <ul className="help-list">
+        <li>Service : This service aggregate news from 'https://newsapi.org/'</li>
+        <li>
+          Command :
+          <ul>
+            <li><b>Source</b> (Select news sources)</li>
+            <li><b>Date</b> (Select specific date)</li>
+            <li><b>Keyword</b> (Select keyword)</li>
+            <li><b>Search</b> (Start search, after choosing at least one of source or keyword)</li>
+            <li><b>List</b> (Show list view, after Search command)</li>
+            <li><b>Card</b> (Show card view, after Search command)</li>
+          </ul>
+        </li>
+        <li>Default : Source(All sources), Date(The newest), Keyword(All articles)</li>
+        <li>Sort : Popularity</li>
+      </ul>
+    );
 
     return (
       <div className="Terminal">
@@ -243,12 +261,12 @@ class Terminal extends Component {
               value={inputValue}
               placeholder="If you want to know about the command, type 'Help' keyword"
               autoFocus
-              onChange={this.handleChange}
-              onKeyDown={this.handleKeydown}
+              onChange={this.handleCommandChange}
+              onKeyDown={this.handleCommandKeydown}
               ref={this.inputRef}
             />
             <div className="Terminal-main-command-help">
-              <Help />
+              {helpMessage}
             </div>
           </section>
           <section className="Terminal-main-SearchLog">
@@ -256,7 +274,7 @@ class Terminal extends Component {
               <span>CommandLog</span>
             </button>
             <div className={`Terminal-main-wrapper${sectionIndex === 2 ? ' active' : ''}`}>
-              <CommandLog command={command} onSet={this.setApiConditions} />
+              <CommandLog command={command} onInput={this.setApiConditions} />
             </div>
           </section>
           <section className="Terminal-main-contents">
@@ -264,7 +282,7 @@ class Terminal extends Component {
               <span>Contents</span>
             </button>
             <div className={`Terminal-main-wrapper${sectionIndex === 3 ? ' active' : ''}`} onScroll={this.handleContentsScroll}>
-              <Contents onClick={onClick} newsData={newsData} viewType={viewType} />
+              <Contents onClick={onClick} data={newsData} viewType={viewType} />
             </div>
           </section>
           {loading && <Loader />}

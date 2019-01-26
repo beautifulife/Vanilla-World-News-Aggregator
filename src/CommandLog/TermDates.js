@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Date.css';
+import './TermDates.css';
 
-class Date extends Component {
+class TermDates extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      isDone: false,
       isRight: false,
       inputValue: '',
-      isDone: false,
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKeydown = this.handleKeydown.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleInputKeydown = this.handleInputKeydown.bind(this);
   }
 
   componentDidMount() {
-    const { onCommand } = this.props;
+    const { onInit } = this.props;
 
-    if (onCommand) {
-      onCommand('Command', 'Date');
+    if (onInit) {
+      onInit('Command', 'Date');
     }
   }
 
-  handleChange(ev) {
+  handleInputChange(ev) {
     if (ev.currentTarget.value) {
       this.setState({
         isRight: true,
@@ -33,9 +33,9 @@ class Date extends Component {
     }
   }
 
-  handleKeydown(ev) {
+  handleInputKeydown(ev) {
     const { isRight } = this.state;
-    const { onSet, onCommand } = this.props;
+    const { onInput, onInit } = this.props;
 
     if (ev.keyCode === 13) {
       if (isRight) {
@@ -45,8 +45,8 @@ class Date extends Component {
           isDone: true,
         });
 
-        onCommand('Date', ev.currentTarget.value);
-        onSet('date', splittedValue);
+        onInit('Date', ev.currentTarget.value);
+        onInput('Date', splittedValue);
       } else {
         alert('Wrong date type input, please check your command');
       }
@@ -55,22 +55,22 @@ class Date extends Component {
 
   render() {
     const { isRight, inputValue, isDone } = this.state;
-    const { isLog, savedValue } = this.props;
+    const { isLog, logValue } = this.props;
 
     const chooseInputOrSpan = () => {
       if (isLog) {
-        return <span className="Date-text-input right">{savedValue}</span>;
+        return <span className="TermDates-text-input right">{logValue}</span>;
       }
 
       return (
         <input
-          className={isRight ? 'Date-text-input right' : 'Date-text-input'}
+          className={isRight ? 'TermDates-text-input right' : 'TermDates-text-input'}
           type="text"
           value={inputValue}
           placeholder="choose from-date and to-date like 2019-01-05~2019-01-07"
           autoFocus
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeydown}
+          onChange={this.handleInputChange}
+          onKeyDown={this.handleInputKeydown}
         />
       );
     };
@@ -78,7 +78,7 @@ class Date extends Component {
     return (
       <React.Fragment>
         {isDone || (
-          <fieldset className="Date-text">
+          <fieldset className="TermDates-text">
             <legend>Select Date:</legend>
             {chooseInputOrSpan()}
           </fieldset>
@@ -88,11 +88,11 @@ class Date extends Component {
   }
 }
 
-Date.propTypes = {
-  onSet: PropTypes.func,
-  onCommand: PropTypes.func,
+TermDates.propTypes = {
+  onInput: PropTypes.func,
+  onInit: PropTypes.func,
   isLog: PropTypes.bool.isRequired,
-  savedValue: PropTypes.string,
+  logValue: PropTypes.string,
 };
 
-export default Date;
+export default TermDates;

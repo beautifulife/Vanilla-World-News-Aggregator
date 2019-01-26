@@ -7,25 +7,25 @@ class Source extends Component {
     super(props);
 
     this.state = {
-      isRight: false,
       inputValue: '',
       isDone: false,
+      isRight: false,
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKeydown = this.handleKeydown.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleSourceClick = this.handleSourceClick.bind(this);
+    this.handleInputKeydown = this.handleInputKeydown.bind(this);
   }
 
   componentDidMount() {
-    const { onCommand } = this.props;
+    const { onInit } = this.props;
 
-    if (onCommand) {
-      onCommand('Command', 'Source');
+    if (onInit) {
+      onInit('Command', 'Source');
     }
   }
 
-  handleChange(ev) {
+  handleInputChange(ev) {
     const splittedValue = ev.currentTarget.value.split(',');
 
     if (ev.currentTarget.value && splittedValue.length <= 20) {
@@ -36,9 +36,9 @@ class Source extends Component {
     }
   }
 
-  handleKeydown(ev, sourceIndexMap) {
+  handleInputKeydown(ev, sourceIndexMap) {
     const { isRight, inputValue } = this.state;
-    const { onSet, onCommand } = this.props;
+    const { onInput, onInit } = this.props;
 
     if (ev.keyCode === 13) {
       if (isRight) {
@@ -48,15 +48,15 @@ class Source extends Component {
           isDone: true,
         });
 
-        onCommand('Source', ev.currentTarget.value);
-        onSet('source', sourceIdList);
+        onInit('Source', ev.currentTarget.value);
+        onInput('source', sourceIdList);
       } else {
         alert('Wrong sources input, please check your command');
       }
     }
   }
 
-  handleClick(ev) {
+  handleSourceClick(ev) {
     const { inputValue } = this.state;
     const newValue = [...inputValue, ev.currentTarget.firstElementChild.textContent];
 
@@ -69,16 +69,16 @@ class Source extends Component {
 
   render() {
     const { isRight, inputValue, isDone } = this.state;
-    const { sources, isLog, savedValue } = this.props;
+    const { sources, isLog, logValue } = this.props;
     const sourceIndexMap = {};
 
     const sourceItem = sources.map((source, index) => {
-      const keyIndex = source.publishedAt + (index + Math.random()).toString();
+      const keyIndex = source.publishedAt + index.toString();
 
       sourceIndexMap[index + 1] = source.id;
 
       return (
-        <li key={keyIndex} className="Source-list-item" onClick={this.handleClick}>
+        <li key={keyIndex} className="Source-list-item" onClick={this.handleSourceClick}>
           <span>{index + 1}</span>&nbsp;
           <span>{source.name}</span>
         </li>
@@ -87,7 +87,7 @@ class Source extends Component {
 
     const chooseInputOrSpan = () => {
       if (isLog) {
-        return <span className="Source-text-input right">{savedValue}</span>;
+        return <span className="Source-text-input right">{logValue}</span>;
       }
 
       return (
@@ -97,8 +97,8 @@ class Source extends Component {
           value={inputValue}
           placeholder='choose news sources like "1,2,3,4,5..." until 20source possible'
           autoFocus
-          onChange={this.handleChange}
-          onKeyDown={ev => this.handleKeydown(ev, sourceIndexMap)}
+          onChange={this.handleInputChange}
+          onKeyDown={ev => this.handleInputKeydown(ev, sourceIndexMap)}
         />
       );
     };
@@ -111,7 +111,7 @@ class Source extends Component {
               {sourceItem}
             </ul>
             <fieldset className="Source-text">
-              <legend>Select Sources: {isLog ? savedValue.split(',').length : inputValue.length}</legend>
+              <legend>Select Sources: {isLog ? logValue.split(',').length : inputValue.length}</legend>
               {chooseInputOrSpan()}
             </fieldset>
           </React.Fragment>
@@ -122,11 +122,11 @@ class Source extends Component {
 }
 
 Source.propTypes = {
-  onSet: PropTypes.func,
-  onCommand: PropTypes.func,
+  onInput: PropTypes.func,
+  onInit: PropTypes.func,
   sources: PropTypes.instanceOf(Array).isRequired,
   isLog: PropTypes.bool.isRequired,
-  savedValue: PropTypes.string,
+  logValue: PropTypes.string,
 };
 
 export default Source;

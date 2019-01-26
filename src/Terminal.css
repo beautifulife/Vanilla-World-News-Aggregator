@@ -116,3 +116,17 @@
   padding: 10px 15px;
   overflow: auto;
 }
+
+.help-list {
+  margin: 0px;
+  color: #f1f1f0;
+}
+
+.help-list li {
+  margin-bottom: 5px;
+}
+
+.help-list b {
+  margin-left: 5px;
+  color: #5af78d;
+}

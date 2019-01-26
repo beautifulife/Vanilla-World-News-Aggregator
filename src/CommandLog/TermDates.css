@@ -1,14 +1,14 @@
-.Date-text {
+.TermDates-text {
   margin: 0 0 5px 0;
   color: #f1f1f0;
 }
 
-.Date-text-input {
+.TermDates-text-input {
   width: calc(100% - 30px);
   margin-left: 10px;
   color: #ff5b56;
 }
 
-.Date-text-input.right {
+.TermDates-text-input.right {
   color: #5af78d;
 }
