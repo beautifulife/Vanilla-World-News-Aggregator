@@ -20,7 +20,7 @@ class CommandLog extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://newsapi.org/v2/sources?apiKey=cc59bebdf1734c19ab68da14ba034986')
+    axios.get('https://newsapi.org/v2/sources?apiKey=[APIKEY]')
       .then((response) => {
         this.setState({
           sources: response.data.sources,
